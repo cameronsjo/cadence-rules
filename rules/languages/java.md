@@ -1,6 +1,9 @@
 ---
-globs: ["**/*.java", "**/pom.xml", "**/build.gradle", "**/build.gradle.kts"]
-alwaysApply: false
+paths:
+  - "**/*.java"
+  - "**/pom.xml"
+  - "**/build.gradle"
+  - "**/build.gradle.kts"
 ---
 
 # Java Standards

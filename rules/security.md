@@ -1,6 +1,9 @@
 ---
-globs: ["**/auth/**", "**/security/**", "**/login/**", "**/oauth/**"]
-alwaysApply: false
+paths:
+  - "**/auth/**"
+  - "**/security/**"
+  - "**/login/**"
+  - "**/oauth/**"
 ---
 
 # Security Review Standards
