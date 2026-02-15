@@ -7,7 +7,16 @@ paths:
 
 ## Issue Classification
 
-When creating beads issues, **MUST** immediately label each issue as either `needs-design` or `ready-to-implement`.
+When creating beads issues, **MUST** immediately label each issue as `ready-to-implement`, `needs-design`, or `needs-spec`.
+
+### `ready-to-implement` — Mechanical, no ambiguity
+
+Label an issue `ready-to-implement` when ALL of these apply:
+
+- Single clear implementation path
+- Scope is contained (1-2 files, localized change)
+- No design decisions required
+- Examples: extract duplicate code, add caching, fix deprecated API call, move inline import to module level, add memoization
 
 ### `needs-design` — Requires design before coding
 
@@ -21,21 +30,24 @@ Label an issue `needs-design` when ANY of these apply:
 - Touches interfaces, protocols, or public APIs
 - Requires choosing between competing patterns (e.g., `asyncio.wait` vs wrapper pattern)
 
-### `ready-to-implement` — Mechanical, no ambiguity
+### `needs-spec` — Too big for just a plan
 
-Label an issue `ready-to-implement` when ALL of these apply:
+Label an issue `needs-spec` when ANY of these apply:
 
-- Single clear implementation path
-- Scope is contained (1-2 files, localized change)
-- No design decisions required
-- Examples: extract duplicate code, add caching, fix deprecated API call, move inline import to module level, add memoization
+- Crosses system boundaries (frontend + backend + infra, multiple services)
+- Multiple `needs-design` issues would fall out of decomposition
+- External constraints or stakeholder alignment required (security review, API contracts, compliance)
+- Introduces new architectural patterns or foundational abstractions
+- Requires trade-off analysis across competing concerns (performance vs maintainability, security vs usability)
+- Scope unclear enough that the *plan itself* needs planning
+- Examples: new authentication system, cross-service event bus, plugin architecture redesign, new public API surface
 
 ### Workflow
 
 ```bash
 # Create and immediately label
 bd create --title="Fix X" --type=bug --priority=P2
-bd label add <id> needs-design  # or ready-to-implement
+bd label add <id> ready-to-implement  # or needs-design, needs-spec
 ```
 
 When creating issues in bulk, label all issues in the same pass — do not defer labeling to a separate step.
