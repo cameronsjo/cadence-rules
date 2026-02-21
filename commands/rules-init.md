@@ -19,6 +19,7 @@ Install language and security rules from this plugin to the user's global Claude
    - `csharp.md` vs `dotnet.md` or `c-sharp.md`
    - `javascript.md` vs `js.md`
    - `typescript.md` vs `ts.md`
+   - `documentation.md` vs `docs.md` (both ship with the plugin — both are intentional, but warn if a user has only one under a different name)
    If an old-named file exists (e.g., `golang.md`) and the plugin ships the new name (e.g., `go.md`), flag it and offer to remove the old file after installing the new one.
 
 4. **Ask which to install** - Use AskUserQuestion to let the user choose:

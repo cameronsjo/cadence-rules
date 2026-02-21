@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "rules",
-  "description": "Language and domain rules for Claude Code: Python, TypeScript, JavaScript, Go, Rust, Java, C#, and security",
+  "description": "Complete rules for Claude Code: 10 languages, security, quality, git, CI/CD, Docker, MCP, documentation, and more",
   "owner": {
     "name": "Cameron Sjo",
     "github": "cameronsjo"
@@ -10,7 +10,7 @@
     {
       "name": "rules",
       "source": "./.claude-plugin",
-      "description": "Language and domain rules for Claude Code: Python, TypeScript, JavaScript, Go, Rust, Java, C#, and security standards",
+      "description": "Complete rules for Claude Code: 10 languages, security, quality, git, CI/CD, Docker, MCP, documentation, and more",
       "version": "1.0.0"
     }
   ]

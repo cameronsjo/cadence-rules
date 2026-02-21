@@ -1,6 +1,6 @@
 {
   "name": "rules",
-  "description": "Language and domain rules for Claude Code: Python, TypeScript, JavaScript, Go, Rust, Java, C#, and security standards",
+  "description": "Complete rules for Claude Code: 10 languages, security, quality, git, CI/CD, Docker, MCP, documentation, and more",
   "author": {
     "name": "cameronsjo"
   },
@@ -14,6 +14,15 @@
     "rust",
     "java",
     "csharp",
-    "security"
+    "bash",
+    "powershell",
+    "protobuf",
+    "security",
+    "quality",
+    "git",
+    "documentation",
+    "dockerfile",
+    "mcp",
+    "cicd"
   ]
 }
