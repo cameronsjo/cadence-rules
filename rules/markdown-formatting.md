@@ -1,20 +1,18 @@
 # Documentation Standards
 
-Documentation is like sunscreen. You don't appreciate it until you're burned.
-
 ## Markdown
 
 - **MUST** use RFC 2119 keywords (MUST/SHOULD/MAY) in requirements docs
-- **MUST** create documentation files when asked to "write up" something. Actual files. Not a chat response. We're not animals
+- **MUST** create documentation files when asked to "write up" something - actual files, not chat responses
 - **MUST NOT** provide inline responses for writeup requests - create actual files
 - **MUST** use proper markdown: headers, lists, code blocks, tables
 - **MUST** use two spaces after emoji
-- **MUST** write markdown that passes markdownlint validation. If the linter is unhappy, we're all unhappy
+- **MUST** write markdown that passes markdownlint validation
 - **MUST** use consistent list markers (prefer `-`)
-- **MUST** maintain proper heading hierarchy (no skipped levels). We respect the hierarchy
+- **MUST** maintain proper heading hierarchy (no skipped levels)
 - **MUST** include blank lines around headings, lists, code blocks
 - **MUST** use fenced code blocks with language identifiers
-- **SHOULD** be concise, actionable, examples-driven. TL;DR energy but make it professional
+- **SHOULD** be concise, actionable, examples-driven
 - **SHOULD** include diagrams for architecture, flows, complex concepts
 
 ## Tables
@@ -38,12 +36,8 @@ Documentation is like sunscreen. You don't appreciate it until you're burned.
 
 - **SHOULD** use Mermaid for interconnected systems, multi-step flows, architecture diagrams
 - **SHOULD** use ASCII trees for simple decision trees and linear hierarchies
-- **SHOULD NOT** convert simple ASCII diagrams to Mermaid - they're faster to scan and edit. Not everything needs to be fancy
+- **SHOULD NOT** convert simple ASCII diagrams to Mermaid - they're faster to scan and edit
 
-## Obsidian-Specific
-
-- **SHOULD** use `toc` code block macro for table of contents (auto-generates)
-- **SHOULD NOT** manually write TOC links when a macro/plugin exists. Work smarter not harder
 
 ## Structure
 
@@ -53,5 +47,5 @@ Documentation is like sunscreen. You don't appreciate it until you're burned.
 
 ## Naming
 
-- Convention-based top-level: SCREAMING_SNAKE_CASE (`README.md`, `CONTRIBUTING.md`). Yes it's yelling. That's the point
+- Convention-based top-level: SCREAMING_SNAKE_CASE (`README.md`, `CONTRIBUTING.md`)
 - All other docs: kebab-case (`getting-started.md`, `api-overview.md`)

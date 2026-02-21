@@ -1,13 +1,11 @@
 # Security Standards
 
-Security is not a feature. It's the whole personality.
-
 ## Focus Areas (2025+)
 
 - **OWASP Top 10 2025**: Current vulnerability categories
 - **AI/LLM Security**: Prompt injection, PII leakage, model abuse
 - **Supply Chain**: Dependency vulnerabilities, SBOM, attestation
-- **Zero Trust**: Authentication everywhere, least privilege. Trust issues, but make it architecture
+- **Zero Trust**: Authentication everywhere, least privilege
 - **API Security**: BOLA, rate limiting, input validation
 
 ## OWASP Top 10 Checklist
@@ -23,12 +21,10 @@ Security is not a feature. It's the whole personality.
 
 - [ ] Sensitive data encrypted at rest
 - [ ] TLS 1.3 for data in transit
-- [ ] No weak algorithms (MD5, SHA1, DES). These are not vintage, they're expired
+- [ ] No weak algorithms (MD5, SHA1, DES)
 - [ ] Secrets in vault, not env vars for production
 
 ### A03: Injection
-
-The OG. The classic. Still gets people.
 
 - [ ] SQL: Parameterized queries only
 - [ ] Command: No shell execution with user input
@@ -44,7 +40,7 @@ The OG. The classic. Still gets people.
 
 ### A05: Security Misconfiguration
 
-- [ ] Default credentials changed. "admin/admin" is not a strategy
+- [ ] Default credentials changed
 - [ ] Error messages sanitized
 - [ ] Unnecessary features disabled
 - [ ] Security headers configured
@@ -73,7 +69,7 @@ The OG. The classic. Still gets people.
 ### A09: Logging Failures
 
 - [ ] Security events logged
-- [ ] No PII in logs. Seriously. No PII in logs
+- [ ] No PII in logs
 - [ ] Tamper-proof log storage
 - [ ] Alerting configured
 
@@ -86,28 +82,28 @@ The OG. The classic. Still gets people.
 ## Severity Classification
 
 ```yaml
-Critical (P0):  # this is fine (it is NOT fine)
+Critical (P0):
   - Remote code execution
   - Authentication bypass
   - SQL injection
   - Exposed secrets/credentials
   - Privilege escalation to admin
 
-High (P1):  # we need to talk
+High (P1):
   - Stored XSS
   - IDOR on sensitive data
   - Insecure deserialization
   - Missing authentication
   - SSRF to internal services
 
-Medium (P2):  # put it on the backlog (actually do it though)
+Medium (P2):
   - Reflected XSS
   - CSRF without sensitive impact
   - Missing rate limiting
   - Information disclosure
   - Weak cryptography
 
-Low (P3):  # fix it when you're in the neighborhood
+Low (P3):
   - Missing security headers
   - Verbose error messages
   - Clickjacking potential
@@ -163,11 +159,9 @@ const safeHtml = DOMPurify.sanitize(userInput);
 
 ## AI/LLM Security
 
-LLMs are incredibly powerful and will absolutely do unhinged things if you let them.
-
 - **MUST** sanitize user input before sending to LLMs
 - **MUST** validate LLM outputs before execution
 - **MUST** implement PII detection and redaction
-- **MUST NOT** trust LLM-generated code without review. Even this one. Especially this one
+- **MUST NOT** trust LLM-generated code without review
 - **SHOULD** use allowlists for LLM tool/function calls
 - **SHOULD** rate limit LLM API calls per user

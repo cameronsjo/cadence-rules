@@ -2,13 +2,11 @@
 
 ## Date and Time Handling
 
-Timezones are the final boss of software engineering. Respect them.
-
 - **MUST** use UTC for all backend systems: databases, APIs, logs, internal processing
 - **MUST** store timestamps in UTC (ISO 8601 format: `YYYY-MM-DDTHH:mm:ss.sssZ`)
-- **MUST** perform timezone conversions only at presentation layer. One job. At the end. That's it
+- **MUST** perform timezone conversions only at presentation layer
 - **MUST** include timezone information when displaying dates/times to users
-- **SHOULD** use timezone-aware datetime types (not naive datetimes). Naive datetimes are the "it's fine" of temporal data
+- **SHOULD** use timezone-aware datetime types (not naive datetimes)
 - **SHOULD** validate timezone identifiers using IANA timezone database (e.g., `America/New_York`, not `EST`)
 - **SHOULD** use timezone aware displays for UI/Frontend
 
@@ -32,7 +30,7 @@ Every outbound call to a paid API crosses a cost boundary. Validate before the b
 - **MUST** scale validation effort proportional to call cost. A $0.001 LLM call gets a schema check. A $0.13 image gen gets a quality gate
 - **SHOULD** log the estimated cost tier when making paid API calls, so cost is visible in observability
 - **SHOULD** implement dry-run modes for expensive operations (preview what would be sent without sending it)
-- **MUST NOT** retry failed calls without diagnosing the input first. Retrying garbage is paying twice for nothing
+- **MUST NOT** retry failed calls without diagnosing the input first
 
 ### Pre-Flight Check Pattern
 
@@ -60,7 +58,7 @@ def preflight(payload, cost_tier: str) -> bool:
 
 - **MUST** profile code before optimizing. Measure twice, refactor once
 - **MUST** monitor bundle sizes
-- **SHOULD** implement strategic caching and lazy loading. Work smarter, not harder. We're tired
+- **SHOULD** implement strategic caching and lazy loading
 
 ## Design Patterns
 
@@ -72,16 +70,14 @@ def preflight(payload, cost_tier: str) -> bool:
 
 ## Container & Self-Hosted Standards
 
-Because we self-host things. It's our love language.
-
 ### Required
 
 - **MUST** expose `/health` endpoint for orchestrator/load balancer health checks
-- **MUST** handle SIGTERM gracefully (drain connections, finish in-flight requests). Die with dignity
+- **MUST** handle SIGTERM gracefully (drain connections, finish in-flight requests)
 - **MUST** log to stdout (not files)
 - **SHOULD** use structured JSON logging
 - **MUST** accept configuration via environment variables
-- **MUST** run as non-root user in containers. Root in containers is the "running with scissors" of DevOps
+- **MUST** run as non-root user in containers
 - **MUST** honor `X-Forwarded-*` headers when behind reverse proxy
 
 ### Recommended
@@ -91,13 +87,11 @@ Because we self-host things. It's our love language.
 - **SHOULD** support OpenTelemetry trace context propagation
 - **SHOULD** propagate correlation IDs across service boundaries
 - **SHOULD** expose Prometheus metrics at `/metrics`
-- **SHOULD** use versioned image tags (avoid `:latest`). `:latest` is a lie and we all know it
+- **SHOULD** use versioned image tags (avoid `:latest`)
 
 ### Container Image Standards
 
 #### OCI Labels
-
-Label your containers. It's like labeling your Tupperware. Future you will be grateful.
 
 - **MUST** include `org.opencontainers.image.source` label linking to repository
 - **MUST** include `org.opencontainers.image.description` with brief description
@@ -107,8 +101,6 @@ Label your containers. It's like labeling your Tupperware. Future you will be gr
 - **SHOULD** include `org.opencontainers.image.created` (build timestamp)
 
 #### Supply Chain Security
-
-Trust nobody. Verify everything. This is not paranoia, this is engineering.
 
 - **MUST** sign container images with Cosign (keyless OIDC preferred for CI/CD)
 - **MUST** generate SLSA build provenance attestations
@@ -138,11 +130,9 @@ permissions:
 
 - **MUST** use tool-prefixed names for application-specific environment variables
 - **Pattern**: `TOOLNAME_SETTING` (e.g., `MYAPP_DEBUG`, `MYAPP_DISABLE`)
-- **MUST NOT** use generic names that could conflict (e.g., `DEBUG`, `DISABLE`). Namespace your stuff. We live in a society
+- **MUST NOT** use generic names that could conflict (e.g., `DEBUG`, `DISABLE`)
 
 ## Terminology
-
-Words matter. Use good ones.
 
 - **MUST** be accurate, neutral, inclusive while preserving technical clarity
 - **MUST** use: allow/block/denylist over whitelist/blacklist
@@ -159,13 +149,11 @@ Words matter. Use good ones.
 - **MUST** use pnpm for JS/TS (not npm/yarn)
 - **MUST** use Biome for JS/TS linting and formatting (replaces ESLint + Prettier)
 - **MUST** use mise for runtime version management (replaces nvm, pyenv, etc.)
-- **MUST** include structured logging + OpenTelemetry early. Not after the incident. Before
+- **MUST** include structured logging + OpenTelemetry from the start
 - **SHOULD** use feature flags for rollouts/testing
 - **SHOULD** use Husky for team repos
 
 ## Makefiles
-
-Every project gets a Makefile. It's the universal task runner — no install, no config, tab-complete out of the box.
 
 - **MUST** include a `Makefile` as the project's task runner entry point
 - **MUST** include inline comments above each target explaining what it does
@@ -177,17 +165,13 @@ Every project gets a Makefile. It's the universal task runner — no install, no
 
 ## New Projects
 
-Every new project gets the full treatment. No excuses. No "I'll add it later."
-
 - **MUST** include: .gitignore, README, CONTRIBUTING, CHANGELOG, LICENSE, Makefile
 - **MUST** configure linting/formatting + CI/CD from day 1
 
 ## Dependencies
 
-Choose your dependencies like you choose your brunch spot. Carefully.
-
 - **MUST** search for latest stable versions
 - **MUST** audit dependencies for: size, maintenance, security, active community
 - **MUST NOT** use pre-release versions unless specified
-- **SHOULD NOT** use dependencies >6 months old without review. If it hasn't been updated since your last haircut, be suspicious
+- **SHOULD NOT** use dependencies >6 months old without review
 - **SHOULD** consider simple in-house solutions before adding dependencies
