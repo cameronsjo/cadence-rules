@@ -19,7 +19,12 @@ Install language and security rules from this plugin to the user's global Claude
    - `csharp.md` vs `dotnet.md` or `c-sharp.md`
    - `javascript.md` vs `js.md`
    - `typescript.md` vs `ts.md`
-   - `documentation.md` vs `docs.md` (both ship with the plugin — both are intentional, but warn if a user has only one under a different name)
+   - `markdown-formatting.md` vs `documentation.md` (renamed — remove old `documentation.md` if present)
+   - `core-code-principles.md` vs `code-style.md` (renamed)
+   - `git-workflow.md` vs `git.md` (renamed)
+   - `testing-and-observability.md` vs `quality.md` (renamed)
+   - `security-standards.md` vs `security.md` (renamed)
+   - `engineering-standards.md` vs `standards.md` (renamed)
    If an old-named file exists (e.g., `golang.md`) and the plugin ships the new name (e.g., `go.md`), flag it and offer to remove the old file after installing the new one.
 
 4. **Ask which to install** - Use AskUserQuestion to let the user choose:
@@ -35,7 +40,7 @@ Install language and security rules from this plugin to the user's global Claude
 6. **Copy rules** - For each selected rule file:
    - Copy to `~/.claude/rules/` with flat structure (no `languages/` subdirectory)
    - Plugin path `rules/languages/python.md` → `~/.claude/rules/python.md`
-   - Plugin path `rules/security.md` → `~/.claude/rules/security.md`
+   - Plugin path `rules/security-standards.md` → `~/.claude/rules/security-standards.md`
    - Remove any flagged old-name duplicates the user approved for cleanup
    - Report what was installed, skipped, merged, and cleaned up
 
