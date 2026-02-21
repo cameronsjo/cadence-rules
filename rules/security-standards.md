@@ -1,5 +1,12 @@
 # Security Standards
 
+## Core Principles
+
+- **MUST** be secure-by-default and secure-by-design
+- **MUST NOT** commit secrets - use environment variables
+- **MUST** ensure security opt-outs are environment-gated (never in production)
+- **MAY** use security opt-outs for local development (HTTP on localhost, disabled auth, relaxed CORS)
+
 ## Focus Areas (2025+)
 
 - **OWASP Top 10 2025**: Current vulnerability categories
@@ -112,50 +119,10 @@ Low (P3):
 
 ## Security Patterns
 
-```python
-# Input validation
-from pydantic import BaseModel, EmailStr, constr
-
-class UserInput(BaseModel):
-    email: EmailStr
-    name: constr(min_length=1, max_length=100, pattern=r'^[\w\s-]+$')
-
-# Parameterized queries
-cursor.execute(
-    "SELECT * FROM users WHERE id = %s",
-    (user_id,)  # Never f-string or concatenation!
-)
-
-# Output encoding
-from markupsafe import escape
-safe_html = escape(user_input)
-
-# Rate limiting
-from slowapi import Limiter
-limiter = Limiter(key_func=get_remote_address)
-
-@app.get("/api/login")
-@limiter.limit("5/minute")
-async def login(): ...
-```
-
-```typescript
-// Input validation with Zod
-const UserInput = z.object({
-  email: z.string().email(),
-  name: z.string().min(1).max(100).regex(/^[\w\s-]+$/),
-});
-
-// Parameterized queries
-const user = await db.query(
-  "SELECT * FROM users WHERE id = $1",
-  [userId]  // Never template literals!
-);
-
-// Output encoding
-import DOMPurify from "dompurify";
-const safeHtml = DOMPurify.sanitize(userInput);
-```
+- **MUST** use parameterized queries (never string interpolation)
+- **MUST** validate input with schema libraries (Pydantic, Zod)
+- **MUST** encode output (markupsafe, DOMPurify)
+- **SHOULD** implement rate limiting on auth and API endpoints
 
 ## AI/LLM Security
 

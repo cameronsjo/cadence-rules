@@ -17,7 +17,7 @@
 
 ## Tables
 
-- **MUST** bold the best value in each numeric/statistical column. The reader's eye should find the winner instantly
+- **MUST** bold the best value in each numeric/statistical column
 - **SHOULD** include an italicized caption below statistics tables clarifying value direction (e.g., *Higher FPS is better. Lower latency is better.*)
 - **SHOULD** right-align numeric columns for easy visual comparison
 
@@ -37,7 +37,6 @@
 - **SHOULD** use Mermaid for interconnected systems, multi-step flows, architecture diagrams
 - **SHOULD** use ASCII trees for simple decision trees and linear hierarchies
 - **SHOULD NOT** convert simple ASCII diagrams to Mermaid - they're faster to scan and edit
-
 
 ## Structure
 

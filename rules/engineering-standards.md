@@ -1,4 +1,4 @@
-# Technical Standards
+# Engineering Standards
 
 ## Date and Time Handling
 
@@ -12,7 +12,7 @@
 
 ## Cost Boundaries
 
-Every outbound call to a paid API crosses a cost boundary. Validate before the boundary, not after. Your machine's CPU is free. The API call is not.
+Validate before the cost boundary, not after.
 
 ### Compute Tiers
 
@@ -25,38 +25,16 @@ Every outbound call to a paid API crosses a cost boundary. Validate before the b
 
 ### Rules
 
-- **MUST** validate payloads before crossing a cost boundary. Empty arrays, malformed inputs, and placeholder data are real money wasted
+- **MUST** validate payloads before crossing a cost boundary
 - **MUST** fail fast on obviously invalid inputs -- check locally before making the network call
-- **MUST** scale validation effort proportional to call cost. A $0.001 LLM call gets a schema check. A $0.13 image gen gets a quality gate
+- **MUST** scale validation effort proportional to call cost
 - **SHOULD** log the estimated cost tier when making paid API calls, so cost is visible in observability
 - **SHOULD** implement dry-run modes for expensive operations (preview what would be sent without sending it)
 - **MUST NOT** retry failed calls without diagnosing the input first
 
-### Pre-Flight Check Pattern
-
-```python
-def preflight(payload, cost_tier: str) -> bool:
-    """Validate before crossing a cost boundary."""
-    # All tiers: structural validity
-    if not payload or payload == [] or payload == {}:
-        raise ValueError("Empty payload -- refusing to send to paid API")
-
-    # Metered+: content quality
-    if cost_tier in ("metered", "expensive"):
-        if isinstance(payload, str) and len(payload.split()) < 10:
-            raise ValueError(f"Payload too short ({len(payload.split())} words) for {cost_tier} API")
-
-    # Expensive: quality gate
-    if cost_tier == "expensive":
-        # Domain-specific quality checks here
-        pass
-
-    return True
-```
-
 ## Performance
 
-- **MUST** profile code before optimizing. Measure twice, refactor once
+- **MUST** profile code before optimizing
 - **MUST** monitor bundle sizes
 - **SHOULD** implement strategic caching and lazy loading
 

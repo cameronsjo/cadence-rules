@@ -1,23 +1,10 @@
-# Quality Standards
-
-## Testing
+# Testing and Observability
 
 - **MUST** test behavior, not implementation
 - **MUST** catch real bugs, not just increase coverage
 - **MUST** test happy path before optimization
 - **SHOULD** prefer integration tests over unit tests
 - **SHOULD** build systematic debugging tools rather than relying on manual testing
-
-## Security
-
-- **MUST** be secure-by-default: all systems secure out-of-the-box
-- **MUST** be secure-by-design: build security into architecture from start
-- **MUST** validate and sanitize all input
-- **MUST** ensure security opt-outs are environment-gated (never in production)
-- **MUST NOT** commit secrets - use environment variables
-- **MAY** use security opt-outs for local development and debugging (HTTP on localhost, enhanced logging, disabled auth, relaxed CORS, mock security for testing)
-- **SHOULD** make opt-outs explicit and documented
-- **SHOULD** use environment variables or feature flags to control opt-outs
 
 ## Observability
 

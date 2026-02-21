@@ -1,6 +1,4 @@
-# Code Style
-
-## Core Principles
+# Core Code Principles
 
 - **MUST** write code that reads like paragraphs with clear method/variable names
 - **MUST** add type annotations to all code
@@ -28,16 +26,12 @@
 
 ## Avoid Over-Engineering
 
-- Don't add features, refactor code, or make "improvements" beyond what was asked
-- A bug fix doesn't need surrounding code cleaned up
-- A simple feature doesn't need extra configurability
-- Don't add docstrings, comments, or type annotations to code you didn't change
-- Only add comments where the logic isn't self-evident
-- Don't add error handling or fallbacks for scenarios that can't happen
-- Don't use feature flags or backwards-compatibility shims when you can just change the code
-- Don't create helpers, utilities, or abstractions for one-time operations
-- Don't design for hypothetical future requirements (YAGNI)
-- Three similar lines of code is better than a premature abstraction
+- **MUST NOT** add features, refactor code, or make "improvements" beyond what was asked
+- **MUST NOT** add docstrings, comments, or type annotations to code you didn't change
+- **MUST NOT** add error handling or fallbacks for scenarios that can't happen
+- **MUST NOT** create helpers, utilities, or abstractions for one-time operations
+- **SHOULD** only add comments where the logic isn't self-evident
+- **SHOULD** prefer three similar lines over a premature abstraction (YAGNI)
 
 ## Backwards Compatibility
 
