@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "rules",
-  "description": "Complete rules for Claude Code: 10 languages, security, quality, git, CI/CD, Docker, MCP, documentation, and more",
+  "description": "How to write code — language standards, security, quality, git, CI/CD, Docker, MCP, documentation",
   "owner": {
     "name": "Cameron Sjo",
     "github": "cameronsjo"
@@ -10,7 +10,7 @@
     {
       "name": "rules",
       "source": "./.claude-plugin",
-      "description": "Complete rules for Claude Code: 10 languages, security, quality, git, CI/CD, Docker, MCP, documentation, and more",
+      "description": "How to write code — language standards, security, quality, git, CI/CD, Docker, MCP, documentation",
       "version": "1.0.0"
     }
   ]

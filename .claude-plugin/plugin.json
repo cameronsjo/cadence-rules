@@ -1,6 +1,6 @@
 {
   "name": "rules",
-  "description": "Complete rules for Claude Code: 10 languages, security, quality, git, CI/CD, Docker, MCP, documentation, and more",
+  "description": "How to write code — language standards, security, quality, git, CI/CD, Docker, MCP, documentation",
   "author": {
     "name": "cameronsjo"
   },
