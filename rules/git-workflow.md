@@ -22,4 +22,9 @@
 
 - **MUST** be direct and constructive
 - **SHOULD** prioritize architecture and bugs over style
-- **SHOULD** suggest improvements, not just problems
+- **SHOULD** use suggestion blocks for proposed changes
+- **SHOULD** explain the "why" behind review feedback
+- **SHOULD** use inline PR review comments (file + line range annotations) over top-level PR comments
+- **SHOULD** submit as a single PR review with inline comments (not individual comment posts)
+- **SHOULD** support re-entrancy: dismiss/replace previous review on re-run, no duplicate comments
+- **MUST NOT** leave unactionable comments
