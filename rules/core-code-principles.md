@@ -1,3 +1,4 @@
+<!-- managed by rules — changes will be overwritten by /rules:init -->
 # Core Code Principles
 
 - **MUST** write code that reads like paragraphs with clear method/variable names

@@ -1,3 +1,4 @@
+<!-- managed by rules — changes will be overwritten by /rules:init -->
 ---
 paths:
   - "**/*.java"

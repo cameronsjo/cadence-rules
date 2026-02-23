@@ -1,60 +1,91 @@
 ---
 name: rules-init
 description: Install language and security rules to ~/.claude/rules/. Self-destructs after running so it reappears when the plugin updates with new rules.
+allowed-tools: Bash, AskUserQuestion
 ---
 
-Install language and security rules from this plugin to the user's global Claude Code rules directory.
+Install rules from this plugin to `~/.claude/rules/` using prefixed filenames (`rules-*.md`).
 
 ## Steps
 
-1. **Show available rules** - List all `.md` files in this plugin's `rules/` directory (relative to `${CLAUDE_PLUGIN_ROOT}`), showing which ones already exist in `~/.claude/rules/` and which are new or updated.
+1. **Hash compare** — Run this bash script to produce a manifest. Do NOT read any rule file contents.
 
-2. **Detect conflicts** - For each rule that already exists in `~/.claude/rules/`, diff the plugin version against the installed version. Categorize each file as:
-   - **New** - doesn't exist yet
-   - **Unchanged** - identical content, no action needed
-   - **Conflict** - both exist with different content
+```bash
+DEST="$HOME/.claude/rules"
+mkdir -p "$DEST"
 
-3. **Detect filename conflicts** - Check for same-purpose rules with different filenames that would cause silent duplicate loading. Known aliases to check:
-   - `golang.md` vs `go.md`
-   - `csharp.md` vs `dotnet.md` or `c-sharp.md`
-   - `javascript.md` vs `js.md`
-   - `typescript.md` vs `ts.md`
-   - `markdown-formatting.md` vs `documentation.md` (renamed — remove old `documentation.md` if present)
-   - `core-code-principles.md` vs `code-style.md` (renamed)
-   - `git-workflow.md` vs `git.md` (renamed)
-   - `testing-and-observability.md` vs `quality.md` (renamed)
-   - `security-standards.md` vs `security.md` (renamed)
-   - `engineering-standards.md` vs `standards.md` (renamed)
-   If an old-named file exists (e.g., `golang.md`) and the plugin ships the new name (e.g., `go.md`), flag it and offer to remove the old file after installing the new one.
+echo "=== STATUS ==="
+for src in "${CLAUDE_PLUGIN_ROOT}"/rules/*.md "${CLAUDE_PLUGIN_ROOT}"/rules/languages/*.md; do
+  [ -f "$src" ] || continue
+  name="rules-$(basename "$src")"
+  dest="$DEST/$name"
+  if [ ! -f "$dest" ]; then
+    echo "NEW $name"
+  elif [ "$(md5 -q "$src")" = "$(md5 -q "$dest")" ]; then
+    echo "UNCHANGED $name"
+  else
+    echo "UPDATED $name"
+  fi
+done
 
-4. **Ask which to install** - Use AskUserQuestion to let the user choose:
-   - "Install all" (recommended) - copies everything, overwrites conflicts with plugin version
-   - "Install new only" - skip files that already exist in ~/.claude/rules/
-   - "Review conflicts" - for each conflicting file, show a summary of differences and ask: overwrite, skip, or merge (append plugin-only sections)
+echo "=== MIGRATE ==="
+for src in "${CLAUDE_PLUGIN_ROOT}"/rules/*.md "${CLAUDE_PLUGIN_ROOT}"/rules/languages/*.md; do
+  [ -f "$src" ] || continue
+  old="$DEST/$(basename "$src")"
+  [ -f "$old" ] && echo "OLD $(basename "$src")"
+done
+```
 
-5. **Handle conflicts** - When "Review conflicts" is selected:
-   - For each conflicting file, read both versions and summarize the key differences
-   - Use AskUserQuestion per file: "Overwrite with plugin version", "Keep existing", or "Merge (keep both, deduplicate)"
-   - For merge: combine both files, remove duplicate sections, preserve user customizations that don't exist in the plugin version
+2. **Show summary** — Format the manifest as a markdown table:
 
-6. **Copy rules** - For each selected rule file:
-   - Copy to `~/.claude/rules/` with flat structure (no `languages/` subdirectory)
-   - Plugin path `rules/languages/python.md` → `~/.claude/rules/python.md`
-   - Plugin path `rules/security-standards.md` → `~/.claude/rules/security-standards.md`
-   - Remove any flagged old-name duplicates the user approved for cleanup
-   - Report what was installed, skipped, merged, and cleaned up
+| File | Status |
+|------|--------|
+| `rules-python.md` | NEW / UNCHANGED / UPDATED |
 
-7. **Self-destruct** - After successful installation:
-   - Find this plugin's cache directory by looking for `rules` plugin in `~/.claude/plugins/cache/`
-   - Delete ONLY this command file from the cached copy: `~/.claude/plugins/cache/*/rules/commands/rules-init.md`
-   - Explain to the user: "The rules-init command has been removed from your local cache. It will reappear next time the rules plugin updates, prompting you to install any new or changed rules."
+If any `OLD` entries exist, add a migration note: "Found unprefixed files that will be removed: ..."
 
-8. **Summary** - Show what was installed, skipped, merged, and cleaned up. Remind the user to restart Claude Code for rules to take effect.
+3. **Ask** — Single AskUserQuestion:
+   - "Install all (Recommended)" — copy all NEW + UPDATED files
+   - "Install new + updated only" — same behavior, just an explicit label
+   - "Skip" — do nothing
+
+If everything is UNCHANGED and no OLD files exist, skip the question and report "All rules are up to date."
+
+4. **Install** — If not skipped, run:
+
+```bash
+DEST="$HOME/.claude/rules"
+for src in "${CLAUDE_PLUGIN_ROOT}"/rules/*.md "${CLAUDE_PLUGIN_ROOT}"/rules/languages/*.md; do
+  [ -f "$src" ] || continue
+  cp "$src" "$DEST/rules-$(basename "$src")"
+done
+```
+
+5. **Remove old unprefixed** — If OLD files were detected, run:
+
+```bash
+DEST="$HOME/.claude/rules"
+for src in "${CLAUDE_PLUGIN_ROOT}"/rules/*.md "${CLAUDE_PLUGIN_ROOT}"/rules/languages/*.md; do
+  [ -f "$src" ] || continue
+  old="$DEST/$(basename "$src")"
+  [ -f "$old" ] && rm "$old" && echo "Removed: $(basename "$src")"
+done
+```
+
+6. **Self-destruct** — Delete this command from the plugin cache:
+
+```bash
+rm -f "$HOME"/.claude/plugins/cache/*/rules/commands/rules-init.md
+```
+
+Tell the user: "The /rules:init command has been removed from cache. It will reappear when the rules plugin updates."
+
+7. **Summary** — Report counts: installed, updated, unchanged, migrated. Remind user to restart Claude Code.
 
 ## Important
 
-- The source rules live at `${CLAUDE_PLUGIN_ROOT}/rules/` - read from there
-- The destination is `~/.claude/rules/` (flat, no subdirectories) - write there
-- When comparing existing vs new, use file content diff, not just existence
-- Always check for filename aliases to prevent silent duplicate rule loading
-- The self-destruct targets the CACHE copy, not the source repo
+- Do NOT read rule file contents — the hash comparison handles everything
+- Source: `${CLAUDE_PLUGIN_ROOT}/rules/` — Destination: `~/.claude/rules/`
+- Prefix: every installed file gets `rules-` prepended to its basename
+- Files in `~/.claude/rules/` NOT matching `rules-*` are user-managed and never touched
+- Self-destruct targets the CACHE copy, not the source repo
