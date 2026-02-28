@@ -35,6 +35,7 @@ Go remains simple. Use stdlib over frameworks. Generics for data structures, not
 - **MUST NOT** use package-level global variables for DB/loggers - inject via constructors
 - **SHOULD** use slog for structured logging (not Logrus/Zap)
 - **SHOULD** prefer table-driven tests
+- **SHOULD** use `assert.Regexp` over `assert.Contains` when asserting against generated or dynamic content (enum values, ordered lists, version strings)
 - **SHOULD** accept interfaces, return structs
 - **SHOULD** use sqlc or pgx for database (explicit SQL) - avoid heavy ORMs like GORM
 - **SHOULD** pass dependencies manually in `NewService()` constructors - avoid magic DI frameworks
