@@ -1,4 +1,4 @@
-<!-- managed by rules — changes will be overwritten by /rules:init -->
+<!-- managed by rules — changes will be overwritten by /rules:init-project -->
 ---
 paths:
   - "**/*.cs"
