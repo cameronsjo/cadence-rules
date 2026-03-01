@@ -25,6 +25,17 @@
 - **Process**: Create GitHub issue FIRST, THEN add comment with reference
 - **Enforcement**: `/ready` and `/pr.review` commands will BLOCK commits/PRs with violations
 
+## Functional Core
+
+Separate decisions from side effects. Write the decision as a pure function first, then wrap it with I/O.
+
+- **MUST** extract decision logic (if/else, switch, validation, transformation) into pure functions when the containing function also performs I/O
+- **MUST** write and test the pure function before writing the I/O wrapper
+- **SHOULD** keep I/O wrappers thin — fetch data, call pure function, act on result
+- **SHOULD NOT** embed branching logic inside functions that read files, call APIs, or write output
+
+Pure function = deterministic, no side effects, same inputs produce same outputs. Testable with table-driven tests, zero mocks, sub-millisecond execution.
+
 ## Avoid Over-Engineering
 
 - **MUST NOT** add features, refactor code, or make "improvements" beyond what was asked
