@@ -1,5 +1,5 @@
 ---
-name: rules-init-user
+name: init-user
 description: Install universal rules (code, security, git, docs) and optionally language rules to ~/.claude/rules/. Self-destructs after running.
 allowed-tools: Bash, AskUserQuestion
 ---

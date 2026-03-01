@@ -1,5 +1,5 @@
 ---
-name: rules-init-project
+name: init-project
 description: Detect project languages/tools and install matching rules to .claude/rules/ with path-scoping. Rules load only when Claude touches matching files.
 allowed-tools: Bash, AskUserQuestion
 ---
