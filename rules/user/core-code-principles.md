@@ -1,4 +1,6 @@
-<!-- managed by rules — changes will be overwritten by /rules:init-user -->
+---
+notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
+---
 # Core Code Principles
 
 - **MUST** write code that reads like paragraphs with clear method/variable names

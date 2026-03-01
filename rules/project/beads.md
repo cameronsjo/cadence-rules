@@ -1,5 +1,5 @@
-<!-- managed by rules — changes will be overwritten by /rules:init-project -->
 ---
+notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
 paths:
   - "**/.beads/**"
 ---
