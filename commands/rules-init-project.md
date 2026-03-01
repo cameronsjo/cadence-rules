@@ -1,10 +1,14 @@
 ---
 name: init-project
-description: Detect project languages/tools and install matching rules to .claude/rules/ with path-scoping. Rules load only when Claude touches matching files.
+description: Install rules to .claude/rules/ with path-scoping. Detect project languages or choose manually. Self-destructs after running.
 allowed-tools: Bash, AskUserQuestion
 ---
 
-Auto-detect project contents, then install matching path-scoped rules to `.claude/rules/` in the current project. These rules use `paths:` frontmatter so they only load when Claude touches relevant files (e.g., python.md loads only when reading .py files).
+Install rules from this plugin to `.claude/rules/` in the current project using prefixed filenames (`rules-*.md`). Rules use `paths:` frontmatter so they only load when Claude touches matching files.
+
+Two tiers:
+- **Universal rules** (6): code principles, engineering standards, git workflow, markdown, security, testing/observability — always-loaded, no path scoping
+- **Language & tool rules** (16): bash, csharp, go, java, javascript, powershell, protobuf, python, rust, typescript, beads, cicd, dockerfile, docs, mcp, mermaid — path-scoped
 
 ## Steps
 
@@ -45,21 +49,42 @@ Detected rules for this project:
 - [x] cicd — .github/workflows/
 ```
 
-3. **Ask** — Use the AskUserQuestion tool with these exact options:
-   - label: "Install detected (Recommended)", description: "Install all rules matching detected languages and tools"
-   - label: "Let me choose", description: "Pick exactly which rules to install from all 16 available"
-   - label: "Skip", description: "Do nothing"
+3. **Ask scope** — Use the AskUserQuestion tool with these exact options:
+   - label: "Universal", description: "Install the 6 core rules only (code, security, git, docs, testing, engineering)"
+   - label: "Universal + Detected (Recommended)", description: "Install 6 core rules + all detected language/tool rules"
+   - label: "All", description: "Install all 22 rules (6 universal + 16 language/tool)"
+   - label: "Specify", description: "Choose exactly which rules to install"
 
-If user selects "Let me choose", present a second AskUserQuestion with `multiSelect: true` listing all 16 available rules.
+If user selects "Specify", present a second AskUserQuestion with `multiSelect: true` listing all 22 available rules by name.
 
-4. **Hash compare** — For the selected rules, run a hash comparison against already-installed project rules:
+4. **Hash compare** — For the selected rules, run a hash comparison. Do NOT read any rule file contents.
 
 ```bash
 DEST=".claude/rules"
 mkdir -p "$DEST"
+
+echo "=== UNIVERSAL ==="
+for src in "${CLAUDE_PLUGIN_ROOT}"/rules/user/*.md; do
+  [ -f "$src" ] || continue
+  name="rules-$(basename "$src")"
+  dest="$DEST/$name"
+  if [ ! -f "$dest" ]; then
+    echo "NEW $name"
+  elif [ "$(md5 -q "$src")" = "$(md5 -q "$dest")" ]; then
+    echo "UNCHANGED $name"
+  else
+    echo "UPDATED $name"
+  fi
+done
+```
+
+For language/tool rules (if selected):
+
+```bash
+DEST=".claude/rules"
 PLUGIN="${CLAUDE_PLUGIN_ROOT}/rules/project"
 
-echo "=== STATUS ==="
+echo "=== LANGUAGE/TOOL ==="
 # For each selected rule, check languages/ first then project root
 for rule in RULE_LIST; do
   if [ -f "$PLUGIN/languages/${rule}.md" ]; then
@@ -84,12 +109,23 @@ done
 
 Replace `RULE_LIST` with the space-separated list of selected rule names (e.g., `python typescript bash dockerfile cicd`).
 
-5. **Install** — For each NEW or UPDATED rule, copy it to `.claude/rules/`:
+5. **Show summary** — Format the manifest as a markdown table. If everything is UNCHANGED, report "All selected rules are up to date." and skip to step 8.
 
+6. **Install** — Copy selected rules:
+
+Universal rules:
+```bash
+DEST=".claude/rules"
+for src in "${CLAUDE_PLUGIN_ROOT}"/rules/user/*.md; do
+  [ -f "$src" ] || continue
+  cp "$src" "$DEST/rules-$(basename "$src")"
+done
+```
+
+Language/tool rules (for "All", copy everything; for "Detected" or "Specify", copy only selected):
 ```bash
 DEST=".claude/rules"
 PLUGIN="${CLAUDE_PLUGIN_ROOT}/rules/project"
-
 for rule in RULE_LIST; do
   if [ -f "$PLUGIN/languages/${rule}.md" ]; then
     src="$PLUGIN/languages/${rule}.md"
@@ -102,7 +138,7 @@ for rule in RULE_LIST; do
 done
 ```
 
-6. **Self-destruct** — Delete this command from the plugin cache:
+7. **Self-destruct** — Delete this command from the plugin cache:
 
 ```bash
 rm -f "$HOME"/.claude/plugins/cache/*/rules/*/commands/rules-init-project.md
@@ -110,16 +146,12 @@ rm -f "$HOME"/.claude/plugins/cache/*/rules/*/commands/rules-init-project.md
 
 Tell the user: "The /rules:init-project command has been removed from cache. It will reappear when the rules plugin updates."
 
-7. **Summary** — Report:
-   - Counts: installed, updated, unchanged, skipped
-   - Remind user these rules live in `.claude/rules/` and should be committed to the repo
-   - Remind user to restart Claude Code
+8. **Summary** — Report counts: installed, updated, unchanged, skipped. Remind user these rules live in `.claude/rules/` and should be committed to the repo. Remind user to restart Claude Code.
 
 ## Important
 
 - Do NOT read rule file contents — hash comparison handles everything
-- Source: `${CLAUDE_PLUGIN_ROOT}/rules/project/` — Destination: `.claude/rules/` (project root)
+- Source: `${CLAUDE_PLUGIN_ROOT}/rules/user/` and `${CLAUDE_PLUGIN_ROOT}/rules/project/` — Destination: `.claude/rules/` (project root)
 - Prefix: every installed file gets `rules-` prepended to its basename
-- Rules keep their `paths:` frontmatter — this is what makes path-scoping work at project level
-- The managed-by comment should reference `/rules:init-project` not `/rules:init`
+- Rules keep their `paths:` frontmatter — this is what makes path-scoping work
 - Self-destruct targets the CACHE copy, not the source repo
