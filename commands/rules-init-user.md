@@ -39,10 +39,10 @@ done
 |------|--------|
 | `rules-engineering-standards.md` | NEW / UNCHANGED / UPDATED |
 
-3. **Ask scope** — Single AskUserQuestion:
-   - "Universal rules only (Recommended)" — install just the universal rules
-   - "Universal + language/tool rules" — also install all path-scoped rules (languages, Docker, CI/CD, etc.)
-   - "Skip" — do nothing
+3. **Ask scope** — Use the AskUserQuestion tool with these exact options:
+   - label: "Universal rules only (Recommended)", description: "Install the 6 core rules (code, security, git, docs, testing, engineering)"
+   - label: "Universal + language/tool rules", description: "Also install all 16 path-scoped rules (languages, Docker, CI/CD, MCP, etc.)"
+   - label: "Skip", description: "Do nothing"
 
 If everything is UNCHANGED and user picks "Universal rules only", skip to step 7.
 
@@ -92,7 +92,7 @@ done
 6. **Self-destruct** — Delete this command from the plugin cache:
 
 ```bash
-rm -f "$HOME"/.claude/plugins/cache/*/rules/commands/rules-init-user.md
+rm -f "$HOME"/.claude/plugins/cache/*/rules/*/commands/rules-init-user.md
 ```
 
 Tell the user: "The /rules:init-user command has been removed from cache. It will reappear when the rules plugin updates."

@@ -45,10 +45,12 @@ Detected rules for this project:
 - [x] cicd — .github/workflows/
 ```
 
-3. **Ask** — Single AskUserQuestion with options:
-   - "Install detected (Recommended)" — install all detected rules
-   - "Let me choose" — if selected, present a multi-select AskUserQuestion listing all 16 available rules so the user can pick exactly which to install
-   - "Skip" — do nothing
+3. **Ask** — Use the AskUserQuestion tool with these exact options:
+   - label: "Install detected (Recommended)", description: "Install all rules matching detected languages and tools"
+   - label: "Let me choose", description: "Pick exactly which rules to install from all 16 available"
+   - label: "Skip", description: "Do nothing"
+
+If user selects "Let me choose", present a second AskUserQuestion with `multiSelect: true` listing all 16 available rules.
 
 4. **Hash compare** — For the selected rules, run a hash comparison against already-installed project rules:
 
@@ -103,7 +105,7 @@ done
 6. **Self-destruct** — Delete this command from the plugin cache:
 
 ```bash
-rm -f "$HOME"/.claude/plugins/cache/*/rules/commands/rules-init-project.md
+rm -f "$HOME"/.claude/plugins/cache/*/rules/*/commands/rules-init-project.md
 ```
 
 Tell the user: "The /rules:init-project command has been removed from cache. It will reappear when the rules plugin updates."
