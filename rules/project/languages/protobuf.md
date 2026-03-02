@@ -134,7 +134,7 @@ service UserService {
 // ❌ Changing field number
 message User {
   string id = 1;
-  string email = 3;  // WAS 2 - BREAKS EVERYTHING
+  string email = 3;  // WAS 2 - breaks deserialization
 }
 
 // ❌ Changing field type

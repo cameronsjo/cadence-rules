@@ -30,7 +30,7 @@ for old in "$OLD_DEST"/rules-*.md; do
 done
 ```
 
-2. **Hash compare** — Compare plugin source against installed destination. Skip reading file contents at this step.
+2. **Hash compare** — Compare plugin source against installed destination. Do NOT read any rule file contents yet.
 
 ```bash
 DEST="$HOME/.claude/rules/workbench"

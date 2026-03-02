@@ -35,7 +35,7 @@ paths:
 - **SHOULD** use `IAsyncEnumerable<T>` for streaming large datasets
 - **SHOULD** use `Span<T>`/`Memory<T>` for parsing to avoid heap allocations
 - **SHOULD** use AOT compilation for serverless/Lambda (eliminates cold starts)
-- **SHOULD** start with modular monolith, not microservices (90% of the time)
+- **SHOULD** start with modular monolith, not microservices
 - **SHOULD** use CQRS pattern - separate read/write operations for scalability
 
 ## Project File

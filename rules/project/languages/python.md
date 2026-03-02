@@ -13,9 +13,9 @@ paths:
 
 - **Runtime**: Python 3.13+ (3.14 released Oct 2025)
 - **Version Management**: mise (replaces pyenv)
-- **Package Management**: uv (10x+ faster than pip, written in Rust)
-- **Linting/Formatting**: Ruff (10-100x faster, replaces black, isort, flake8)
-- **Type Checking**: ty (Astral, 10-60x faster than mypy/Pyright) or Pyright
+- **Package Management**: uv
+- **Linting/Formatting**: Ruff (replaces black, isort, flake8)
+- **Type Checking**: ty (Astral) or Pyright
 - **Validation**: Pydantic v2
 - **Testing**: pytest + pytest-asyncio
 - **AI/LLM**: pydanticai (type-safe LLM interactions)

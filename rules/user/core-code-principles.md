@@ -12,7 +12,7 @@ notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
 - **MUST** use async/await over callbacks for asynchronous operations
 - **MUST NOT** include legacy code, backwards compatibility shims, half-measures, magic strings, or magic numbers
 - **MUST NOT** fail silently - always surface errors clearly
-- **MUST** rename terrible naming when encountered
+- **MUST** rename unclear or misleading names when encountered
 - **SHOULD** Keep It Simple (KISS) - prefer straightforward over clever implementations
 - **SHOULD** prefer functional over imperative, immutable over mutable
 - **SHOULD** use positive names (enabled, visible, active) over negative (disabled, hidden, inactive)

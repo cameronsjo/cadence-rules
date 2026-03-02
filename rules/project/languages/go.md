@@ -19,7 +19,7 @@ paths:
 
 ## Core Philosophy
 
-Go remains simple. Use stdlib over frameworks. Generics for data structures, not business logic.
+Prefer stdlib over frameworks. Use generics for data structures, not business logic.
 
 ## Core Requirements
 
@@ -39,7 +39,7 @@ Go remains simple. Use stdlib over frameworks. Generics for data structures, not
 - **SHOULD** accept interfaces, return structs
 - **SHOULD** use sqlc or pgx for database (explicit SQL) - avoid heavy ORMs like GORM
 - **SHOULD** pass dependencies manually in `NewService()` constructors - avoid magic DI frameworks
-- **SHOULD** use generics for utilities only - if >5 type params, you're overdoing it
+- **SHOULD** use generics for utilities only - limit to 5 type parameters
 - **SHOULD** use range-over-func iterators (1.23+) with `slices.Collect` for collection pipelines
 
 ## Project Structure

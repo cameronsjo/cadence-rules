@@ -55,7 +55,7 @@ When creating issues in bulk, label all issues in the same pass — do not defer
 
 ## Troubleshooting
 
-### Database Corruption (the "no such column" special)
+### Database Corruption ("no such column" errors)
 
 When `bd` commands fail with SQLite schema errors like:
 
@@ -63,9 +63,9 @@ When `bd` commands fail with SQLite schema errors like:
 Error: failed to open database: failed to initialize schema: sqlite3: SQL logic error: no such column: spec_id
 ```
 
-This is a known issue caused by CLI version upgrades against an older DB schema. The schema changed but the database didn't get the memo.
+This is a known issue caused by CLI version upgrades against an older DB schema.
 
-**Key fact:** JSONL is the source of truth, not SQLite. The database is a derived index. Deleting it is like clearing your browser history — cathartic and consequence-free.
+**Key fact:** JSONL is the source of truth, not SQLite. The database is a derived index that can be safely deleted and rebuilt.
 
 **Recovery steps (try in order):**
 
@@ -73,7 +73,7 @@ This is a known issue caused by CLI version upgrades against an older DB schema.
    - `--force` bypasses the broken database open
    - `--source=jsonl` rebuilds from the canonical JSONL files
    - **Caveat:** This often fails when the DB can't open at all (the `spec_id` error blocks even the fix command)
-2. **If doctor fails** (it usually does for schema errors), the nuclear option works every time:
+2. **If doctor fails**, delete and rebuild the database:
 
    ```bash
    rm -f .beads/beads.db .beads/beads.db-wal .beads/beads.db-shm
@@ -87,7 +87,7 @@ This is a known issue caused by CLI version upgrades against an older DB schema.
 
 **Rules:**
 
-- **MUST NOT** attempt to manually ALTER TABLE the SQLite schema. That way lies madness
+- **MUST NOT** manually ALTER TABLE the SQLite schema — rebuild from JSONL instead
 - **MUST NOT** treat the SQLite database as precious data — JSONL files are what matter
 - **SHOULD** run `bd doctor` after CLI version upgrades to catch schema drift early
 - **SHOULD** check `bd version` when schema errors appear — version mismatches are almost always the cause

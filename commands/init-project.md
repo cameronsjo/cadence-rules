@@ -34,7 +34,7 @@ for old in "$OLD_DEST"/rules-*.md; do
 done
 ```
 
-2. **Detect** — Run this bash script from the project root to scan for matching files/directories. Skip reading file contents at this step.
+2. **Detect** — Run this bash script from the project root to scan for matching files/directories. Do NOT read any rule file contents.
 
 ```bash
 echo "=== DETECTION ==="
@@ -79,7 +79,7 @@ Detected rules for this project:
 
 If user selects "Specify", present a second AskUserQuestion with `multiSelect: true` listing all 22 available rules by name.
 
-5. **Hash compare** — For the selected rules, run a hash comparison. Skip reading file contents at this step.
+5. **Hash compare** — For the selected rules, run a hash comparison. Do NOT read any rule file contents yet.
 
 ```bash
 DEST=".claude/rules/workbench"

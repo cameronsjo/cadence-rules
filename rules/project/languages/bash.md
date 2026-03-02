@@ -10,7 +10,7 @@ paths:
 # Bash/Shell Standards
 
 - **Version**: Bash 5.3+ (July 2025) or 5.2
-- **Linting**: ShellCheck (non-negotiable in modern workflows)
+- **Linting**: ShellCheck
 - **Formatting**: shfmt
 - **Readline**: 8.3 (case-insensitive search, export-completions)
 
