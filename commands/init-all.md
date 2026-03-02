@@ -30,7 +30,7 @@ for old in "$OLD_DEST"/rules-*.md; do
 done
 ```
 
-2. **Hash compare** — Compare plugin source against installed destination. Do NOT read any rule file contents yet.
+2. **Hash compare** — Compare plugin source against installed destination. Skip reading file contents at this step.
 
 ```bash
 DEST="$HOME/.claude/rules/workbench"
@@ -99,6 +99,5 @@ Tell the user: "The /rules:init-all command has been removed from cache. It will
 - Source: `${CLAUDE_PLUGIN_ROOT}/rules/user/` and `${CLAUDE_PLUGIN_ROOT}/rules/project/` — Destination: `~/.claude/rules/workbench/`
 - No prefix — files keep their original basename
 - Files outside `workbench/` are user-managed and never touched
-- For UPDATED files, READ both source and destination, MERGE intelligently, then WRITE. Do NOT overwrite blindly
 - Language/tool rules keep their `paths:` frontmatter — path-scoping works at `~/.claude/rules/workbench/`
 - Self-destruct targets the CACHE copy, not the source repo

@@ -34,7 +34,7 @@ for old in "$OLD_DEST"/rules-*.md; do
 done
 ```
 
-2. **Detect** — Run this bash script from the project root to scan for matching files/directories. Do NOT read any rule file contents.
+2. **Detect** — Run this bash script from the project root to scan for matching files/directories. Skip reading file contents at this step.
 
 ```bash
 echo "=== DETECTION ==="
@@ -79,7 +79,7 @@ Detected rules for this project:
 
 If user selects "Specify", present a second AskUserQuestion with `multiSelect: true` listing all 22 available rules by name.
 
-5. **Hash compare** — For the selected rules, run a hash comparison. Do NOT read any rule file contents yet.
+5. **Hash compare** — For the selected rules, run a hash comparison. Skip reading file contents at this step.
 
 ```bash
 DEST=".claude/rules/workbench"
@@ -153,5 +153,4 @@ For language/tool rules, use the same source lookup logic (check `languages/` fi
 - Source: `${CLAUDE_PLUGIN_ROOT}/rules/user/` and `${CLAUDE_PLUGIN_ROOT}/rules/project/` — Destination: `.claude/rules/workbench/` (project root)
 - No prefix — files keep their original basename
 - Rules keep their `paths:` frontmatter — path-scoping works at `.claude/rules/workbench/` just like `.claude/rules/`
-- For UPDATED files, READ both source and destination, MERGE intelligently, then WRITE. Do NOT overwrite blindly
-- This command does NOT self-destruct — it's useful across multiple projects
+- This command does not self-destruct — it's reusable across projects
