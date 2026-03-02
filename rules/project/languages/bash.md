@@ -29,6 +29,7 @@ paths:
 - **SHOULD** accept `-h`, `--help`, `help` for help text
 - **SHOULD** use `trap cleanup EXIT` for temporary file cleanup
 - **SHOULD** use `: "${REQUIRED_VAR:?Error: not set}"` for required env vars
+- **MUST NOT** use `VAR="$(cmd 2>/dev/null || true)"` in guard/validation scripts — this creates fail-open behavior where parse errors silently bypass the guard. Use explicit error handling instead.
 
 ## Script Template
 
