@@ -1,10 +1,10 @@
 ---
 name: init-project
-description: Install rules to .claude/rules/ with path-scoping. Detect project languages or choose manually. Self-destructs after running.
-allowed-tools: Bash, AskUserQuestion
+description: Install rules to .claude/rules/workbench/ with path-scoping. Detect project languages or choose manually.
+allowed-tools: Read, Write, Bash, AskUserQuestion
 ---
 
-Install rules from this plugin to `.claude/rules/` in the current project using prefixed filenames (`rules-*.md`). Rules use `paths:` frontmatter so they only load when Claude touches matching files.
+Install rules from this plugin to `.claude/rules/workbench/` in the current project. Rules use `paths:` frontmatter so they only load when Claude touches matching files.
 
 Two tiers:
 - **Universal rules** (6): code principles, engineering standards, git workflow, markdown, security, testing/observability — always-loaded, no path scoping
@@ -12,7 +12,29 @@ Two tiers:
 
 ## Steps
 
-1. **Detect** — Run this bash script from the project root to scan for matching files/directories. Do NOT read any rule file contents.
+1. **Migrate** — Detect and move old flat files from the previous prefix scheme:
+
+```bash
+OLD_DEST=".claude/rules"
+NEW_DEST=".claude/rules/workbench"
+mkdir -p "$NEW_DEST"
+
+echo "=== MIGRATE ==="
+for old in "$OLD_DEST"/rules-*.md; do
+  [ -f "$old" ] || continue
+  basename="${old##*/}"
+  stripped="${basename#rules-}"
+  if [ ! -f "$NEW_DEST/$stripped" ]; then
+    mv "$old" "$NEW_DEST/$stripped"
+    echo "MIGRATED $basename -> workbench/$stripped"
+  else
+    rm "$old"
+    echo "REMOVED $basename (already exists in workbench/)"
+  fi
+done
+```
+
+2. **Detect** — Run this bash script from the project root to scan for matching files/directories. Do NOT read any rule file contents.
 
 ```bash
 echo "=== DETECTION ==="
@@ -38,7 +60,7 @@ find . -maxdepth 4 \( -path "*/mcp/*" -o -name "mcp-*" -o -name "*_mcp.py" -o -n
 [ -d ".beads" ] && echo "DETECTED beads"
 ```
 
-2. **Show detections** — Format as a checklist:
+3. **Show detections** — Format as a checklist:
 
 ```
 Detected rules for this project:
@@ -49,7 +71,7 @@ Detected rules for this project:
 - [x] cicd — .github/workflows/
 ```
 
-3. **Ask scope** — Use the AskUserQuestion tool with these exact options:
+4. **Ask scope** — Use the AskUserQuestion tool with these exact options:
    - label: "Universal", description: "Install the 6 core rules only (code, security, git, docs, testing, engineering)"
    - label: "Universal + Detected (Recommended)", description: "Install 6 core rules + all detected language/tool rules"
    - label: "All", description: "Install all 22 rules (6 universal + 16 language/tool)"
@@ -57,16 +79,16 @@ Detected rules for this project:
 
 If user selects "Specify", present a second AskUserQuestion with `multiSelect: true` listing all 22 available rules by name.
 
-4. **Hash compare** — For the selected rules, run a hash comparison. Do NOT read any rule file contents.
+5. **Hash compare** — For the selected rules, run a hash comparison. Do NOT read any rule file contents yet.
 
 ```bash
-DEST=".claude/rules"
+DEST=".claude/rules/workbench"
 mkdir -p "$DEST"
 
 echo "=== UNIVERSAL ==="
 for src in "${CLAUDE_PLUGIN_ROOT}"/rules/user/*.md; do
   [ -f "$src" ] || continue
-  name="rules-$(basename "$src")"
+  name="$(basename "$src")"
   dest="$DEST/$name"
   if [ ! -f "$dest" ]; then
     echo "NEW $name"
@@ -81,7 +103,7 @@ done
 For language/tool rules (if selected):
 
 ```bash
-DEST=".claude/rules"
+DEST=".claude/rules/workbench"
 PLUGIN="${CLAUDE_PLUGIN_ROOT}/rules/project"
 
 echo "=== LANGUAGE/TOOL ==="
@@ -95,7 +117,7 @@ for rule in RULE_LIST; do
     echo "MISSING $rule"
     continue
   fi
-  name="rules-${rule}.md"
+  name="${rule}.md"
   dest="$DEST/$name"
   if [ ! -f "$dest" ]; then
     echo "NEW $name"
@@ -109,49 +131,27 @@ done
 
 Replace `RULE_LIST` with the space-separated list of selected rule names (e.g., `python typescript bash dockerfile cicd`).
 
-5. **Show summary** — Format the manifest as a markdown table. If everything is UNCHANGED, report "All selected rules are up to date." and skip to step 8.
+6. **Show summary** — Format the manifest as a markdown table. If everything is UNCHANGED, report "All selected rules are up to date." and skip to step 8.
 
-6. **Install** — Copy selected rules:
+7. **Install** — For each rule based on status:
 
-Universal rules:
-```bash
-DEST=".claude/rules"
-for src in "${CLAUDE_PLUGIN_ROOT}"/rules/user/*.md; do
-  [ -f "$src" ] || continue
-  cp "$src" "$DEST/rules-$(basename "$src")"
-done
-```
+- **NEW**: Copy the source file to the destination:
+  ```bash
+  cp "$src" "$DEST/$(basename "$src")"
+  ```
 
-Language/tool rules (for "All", copy everything; for "Detected" or "Specify", copy only selected):
-```bash
-DEST=".claude/rules"
-PLUGIN="${CLAUDE_PLUGIN_ROOT}/rules/project"
-for rule in RULE_LIST; do
-  if [ -f "$PLUGIN/languages/${rule}.md" ]; then
-    src="$PLUGIN/languages/${rule}.md"
-  elif [ -f "$PLUGIN/${rule}.md" ]; then
-    src="$PLUGIN/${rule}.md"
-  else
-    continue
-  fi
-  cp "$src" "$DEST/rules-${rule}.md"
-done
-```
+- **UPDATED**: Read both the source (plugin) file and the destination (installed) file using the Read tool. Merge: incorporate plugin updates while preserving user customizations (added rules, modified wording, extra sections). Write the merged result to the destination using the Write tool.
 
-7. **Self-destruct** — Delete this command from the plugin cache:
+- **UNCHANGED**: Skip.
 
-```bash
-rm -f "$HOME"/.claude/plugins/cache/*/rules/*/commands/rules-init-project.md
-```
+For language/tool rules, use the same source lookup logic (check `languages/` first, then project root). For "Specify", only install the rules the user selected.
 
-Tell the user: "The /rules:init-project command has been removed from cache. It will reappear when the rules plugin updates."
-
-8. **Summary** — Report counts: installed, updated, unchanged, skipped. Remind user these rules live in `.claude/rules/` and should be committed to the repo. Remind user to restart Claude Code.
+8. **Summary** — Report counts: installed, updated, unchanged, migrated, skipped. Remind user these rules live in `.claude/rules/workbench/` and should be committed to the repo. Remind user to restart Claude Code.
 
 ## Important
 
-- Do NOT read rule file contents — hash comparison handles everything
-- Source: `${CLAUDE_PLUGIN_ROOT}/rules/user/` and `${CLAUDE_PLUGIN_ROOT}/rules/project/` — Destination: `.claude/rules/` (project root)
-- Prefix: every installed file gets `rules-` prepended to its basename
-- Rules keep their `paths:` frontmatter — this is what makes path-scoping work
-- Self-destruct targets the CACHE copy, not the source repo
+- Source: `${CLAUDE_PLUGIN_ROOT}/rules/user/` and `${CLAUDE_PLUGIN_ROOT}/rules/project/` — Destination: `.claude/rules/workbench/` (project root)
+- No prefix — files keep their original basename
+- Rules keep their `paths:` frontmatter — path-scoping works at `.claude/rules/workbench/` just like `.claude/rules/`
+- For UPDATED files, READ both source and destination, MERGE intelligently, then WRITE. Do NOT overwrite blindly
+- This command does NOT self-destruct — it's useful across multiple projects

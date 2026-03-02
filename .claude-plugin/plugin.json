@@ -1,6 +1,6 @@
 {
   "name": "rules",
-  "description": "How to work with code \u2014 language standards, security, quality, git, CI/CD, Docker, MCP, documentation",
+  "description": "How to work with code — language standards, security, quality, git, CI/CD, Docker, MCP, documentation",
   "author": {
     "name": "cameronsjo"
   },
@@ -25,5 +25,5 @@
     "mcp",
     "cicd"
   ],
-  "version": "0.0.0"
+  "version": "0.0.1"
 }

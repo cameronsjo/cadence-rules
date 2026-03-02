@@ -1,10 +1,10 @@
 ---
-name: init-user
-description: Install universal rules to ~/.claude/rules/workbench/. Self-destructs after running.
+name: init-all
+description: Install all 22 rules to ~/.claude/rules/workbench/. Self-destructs after running.
 allowed-tools: Read, Write, Bash
 ---
 
-Install all 6 universal rules from this plugin to `$HOME/.claude/rules/workbench/`.
+Install all 22 rules (6 universal + 16 language/tool) from this plugin to `$HOME/.claude/rules/workbench/`.
 
 ## Steps
 
@@ -48,6 +48,21 @@ for src in "${CLAUDE_PLUGIN_ROOT}"/rules/user/*.md; do
     echo "UPDATED $name"
   fi
 done
+
+echo "=== LANGUAGE/TOOL ==="
+PLUGIN="${CLAUDE_PLUGIN_ROOT}/rules/project"
+for src in "$PLUGIN"/languages/*.md "$PLUGIN"/*.md; do
+  [ -f "$src" ] || continue
+  name="$(basename "$src")"
+  dest="$DEST/$name"
+  if [ ! -f "$dest" ]; then
+    echo "NEW $name"
+  elif [ "$(md5 -q "$src")" = "$(md5 -q "$dest")" ]; then
+    echo "UNCHANGED $name"
+  else
+    echo "UPDATED $name"
+  fi
+done
 ```
 
 3. **Show summary** — Format the manifest as a markdown table:
@@ -56,7 +71,7 @@ done
 |------|--------|
 | `engineering-standards.md` | NEW / UNCHANGED / UPDATED |
 
-If everything is UNCHANGED, report "All universal rules are up to date." and skip to step 6.
+If everything is UNCHANGED, report "All rules are up to date." and skip to step 6.
 
 4. **Install** — For each rule based on status:
 
@@ -72,17 +87,18 @@ If everything is UNCHANGED, report "All universal rules are up to date." and ski
 5. **Self-destruct** — Delete this command from the plugin cache:
 
 ```bash
-rm -f "$HOME"/.claude/plugins/cache/*/rules/*/commands/rules-init-user.md
+rm -f "$HOME"/.claude/plugins/cache/*/rules/*/commands/init-all.md
 ```
 
-Tell the user: "The /rules:init-user command has been removed from cache. It will reappear when the rules plugin updates."
+Tell the user: "The /rules:init-all command has been removed from cache. It will reappear when the rules plugin updates."
 
-6. **Summary** — Report counts: installed, updated, unchanged, migrated. Remind user to restart Claude Code.
+6. **Summary** — Report counts: installed, updated, unchanged, migrated. Note that language/tool rules are path-scoped and only load when touching matching files. Remind user to restart Claude Code.
 
 ## Important
 
-- Source: `${CLAUDE_PLUGIN_ROOT}/rules/user/` — Destination: `~/.claude/rules/workbench/`
+- Source: `${CLAUDE_PLUGIN_ROOT}/rules/user/` and `${CLAUDE_PLUGIN_ROOT}/rules/project/` — Destination: `~/.claude/rules/workbench/`
 - No prefix — files keep their original basename
 - Files outside `workbench/` are user-managed and never touched
 - For UPDATED files, READ both source and destination, MERGE intelligently, then WRITE. Do NOT overwrite blindly
+- Language/tool rules keep their `paths:` frontmatter — path-scoping works at `~/.claude/rules/workbench/`
 - Self-destruct targets the CACHE copy, not the source repo
