@@ -72,7 +72,7 @@ If everything is UNCHANGED, report "All universal rules are up to date." and ski
 5. **Self-destruct** — Delete this command from the plugin cache:
 
 ```bash
-rm -f "$HOME"/.claude/plugins/cache/*/rules/*/commands/rules-init-user.md
+rm -f "$HOME"/.claude/plugins/cache/*/rules/*/commands/init-user.md
 ```
 
 Tell the user: "The /rules:init-user command has been removed from cache. It will reappear when the rules plugin updates."
