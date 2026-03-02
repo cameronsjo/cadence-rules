@@ -24,6 +24,5 @@
     "dockerfile",
     "mcp",
     "cicd"
-  ],
-  "version": "0.0.1"
+  ]
 }

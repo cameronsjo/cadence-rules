@@ -10,8 +10,7 @@
     {
       "name": "rules",
       "source": "./.claude-plugin",
-      "description": "How to work with code — language standards, security, quality, git, CI/CD, Docker, MCP, documentation",
-      "version": "1.0.0"
+      "description": "How to work with code — language standards, security, quality, git, CI/CD, Docker, MCP, documentation"
     }
   ]
 }
