@@ -203,6 +203,19 @@ var data = obj as MyType ?? throw new InvalidCastException();
 await DoWorkAsync();
 ```
 
+## Security
+
+- **MUST** use parameterized queries in EF Core, Dapper, and ADO.NET (never string interpolation in SQL)
+- **MUST** use `System.Text.Json` with default settings (safe by default) -- avoid `TypeNameHandling`
+- **MUST** use `System.Security.Cryptography.RandomNumberGenerator` for tokens
+- **MUST** use `Aes.Create()` with GCM mode for encryption
+- **MUST NOT** use `BinaryFormatter` (removed in .NET 9) -- use `System.Text.Json` or protobuf
+- **MUST NOT** use `JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }` (RCE vector)
+- **MUST NOT** use `Process.Start()` with user input in `FileName` -- use argument lists
+- **SHOULD** use `[ValidateAntiForgeryToken]` on all state-changing endpoints
+- **SHOULD** use `DataProtection` API for encrypting cookies and tokens
+- **SHOULD** configure `XmlReaderSettings { DtdProcessing = DtdProcessing.Prohibit }` for XXE prevention
+
 ## Testing
 
 ```csharp

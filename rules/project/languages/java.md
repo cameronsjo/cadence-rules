@@ -55,3 +55,16 @@ public record User(String name) {}
 logger.info("Processing user: name={}", user.name());
 ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 ```
+
+## Security
+
+- **MUST** use `PreparedStatement` for all SQL (never string concatenation)
+- **MUST** use `ObjectInputFilter` when deserializing -- allowlist expected classes
+- **MUST** disable XXE: `factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)`
+- **MUST** use `java.security.SecureRandom` for tokens (not `java.util.Random`)
+- **MUST** use BCrypt or Argon2 for password hashing (not MD5/SHA)
+- **MUST NOT** use string concatenation in SQL -- use `ProcessBuilder` with arg list for commands
+- **MUST NOT** expose Spring Boot Actuator endpoints without authentication
+- **SHOULD** use `@Valid` and Bean Validation for all API inputs
+- **SHOULD** configure JNDI lookup restrictions in Log4j2 (`log4j2.formatMsgNoLookups=true`)
+- **SHOULD** use module system for sandboxing in Java 21+

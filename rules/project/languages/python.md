@@ -52,3 +52,16 @@ paths:
 - **MUST NOT** use bare `os.environ["KEY"]` (crashes if missing — use BaseSettings)
 - **MUST NOT** use eager f-string logging (`logger.debug(f"val={val}")`)
 - **MUST NOT** use `Any` as a type annotation without justification
+
+## Security
+
+- **MUST** use `secrets` module for tokens/keys (not `random`)
+- **MUST** use `subprocess` with arg lists, never `shell=True` with user input
+- **MUST** use `pathlib.Path.resolve()` + `is_relative_to()` for path traversal prevention
+- **MUST** use `tempfile.NamedTemporaryFile()` for temp files (not manual `/tmp/` paths)
+- **MUST** use `hmac.compare_digest()` for constant-time string comparison
+- **MUST NOT** use unsafe deserialization (`yaml.load()`, `marshal.loads()`) on untrusted data
+- **MUST NOT** use `__import__()` or `importlib.import_module()` with user-controlled names
+- **SHOULD** use `defusedxml` for XML parsing (prevents XXE)
+- **SHOULD** use `cryptography` library over `pycryptodome` for new projects
+- **SHOULD** set `trust_remote_code=False` when loading HuggingFace models

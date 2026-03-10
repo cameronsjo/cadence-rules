@@ -47,3 +47,16 @@ unsafe { Box::from_raw(ptr) }
 - Minimize allocations (references, slices)
 - Document all `unsafe` with safety invariants
 - Use `criterion` for benchmarks
+
+## Security
+
+- **MUST** use `.get()` over indexing (`[i]`) for user-controlled indices (indexing panics is DoS)
+- **MUST** use `rand::rngs::OsRng` for cryptographic randomness
+- **MUST** use established crypto libraries (`ring`, `rustls`, `ed25519-dalek`) -- not hand-rolled
+- **MUST** document safety invariants on every `unsafe` block with `// SAFETY:` comment
+- **MUST** test all `unsafe` blocks with Miri (`cargo +nightly miri test`)
+- **MUST NOT** derive `Debug` on structs containing secrets (leaks via `{:?}` formatting)
+- **MUST NOT** use `String::from_utf8_unchecked()` on external input
+- **SHOULD** use `secrecy::Secret<T>` wrapper for sensitive values (prevents accidental logging)
+- **SHOULD** use `sqlx` with compile-time query checking for database access
+- **SHOULD** audit custom `Deserialize` impls for gadget chain vulnerabilities

@@ -54,3 +54,17 @@ Prefer stdlib over frameworks. Use generics for data structures, not business lo
 - **MUST NOT** ignore errors with `_ = json.Unmarshal(...)`
 - **MUST NOT** launch goroutines without lifecycle management
 - **MUST NOT** use bare `os.Getenv` for config — validate at startup with Pydantic-style struct parsing
+
+## Security
+
+- **MUST** use `crypto/rand` for tokens (not `math/rand`)
+- **MUST** use `filepath.Clean()` + `filepath.Rel()` check for path traversal prevention
+- **MUST** use `html/template` for HTML output (not `text/template`)
+- **MUST** set `tls.Config{MinVersion: tls.VersionTLS12}` on HTTP clients and servers
+- **MUST** set timeouts on all HTTP servers (`ReadTimeout`, `WriteTimeout`, `IdleTimeout`)
+- **MUST** validate UTF-8 before string operations on external input: `utf8.Valid()`
+- **MUST NOT** use `os/exec.Command()` with shell expansion -- pass args separately
+- **MUST NOT** use `unsafe` package without documented safety invariants
+- **SHOULD** use `errgroup` with context for goroutine lifecycle (prevents goroutine leaks)
+- **SHOULD** use `sync.Mutex` or channels for shared state -- never bare goroutine writes
+- **SHOULD** use `-race` flag in CI test runs to detect data races
