@@ -79,22 +79,25 @@ if [ "$TYPE" = "skill" ]; then
     ERRORS="${ERRORS}Missing required 'description' field. "
   fi
 
-  # name must match directory
+  # name must match directory (support optional plugin-name: namespace prefix)
   NAME_VALUE=$(echo "$FRONTMATTER" | sed -nE 's/^name:[[:space:]]*(.*)/\1/p' | head -1)
   DIR_NAME=$(basename "$(dirname "$FILE_PATH")")
-  if [ -n "$NAME_VALUE" ] && [ "$NAME_VALUE" != "$DIR_NAME" ]; then
-    ERRORS="${ERRORS}name '${NAME_VALUE}' must match directory '${DIR_NAME}'. "
+  # Strip plugin namespace prefix (e.g., "cadence:writing-skills" -> "writing-skills")
+  SKILL_NAME="${NAME_VALUE##*:}"
+  if [ -n "$NAME_VALUE" ] && [ "$SKILL_NAME" != "$DIR_NAME" ]; then
+    ERRORS="${ERRORS}name '${NAME_VALUE}' must match directory '${DIR_NAME}' (after any namespace prefix). "
   fi
 
-  # name format: lowercase, numbers, hyphens, no leading/trailing/consecutive hyphens
+  # name format: lowercase, numbers, hyphens, optional single colon for namespace
+  # Valid: "my-skill", "cadence:my-skill". Invalid: "my::skill", ":skill", "skill:"
   if [ -n "$NAME_VALUE" ]; then
-    if ! echo "$NAME_VALUE" | grep -qE '^[a-z0-9-]+$'; then
-      ERRORS="${ERRORS}name must use only lowercase letters, numbers, and hyphens. "
+    if ! echo "$NAME_VALUE" | grep -qE '^[a-z0-9-]+(:[a-z0-9-]+)?$'; then
+      ERRORS="${ERRORS}name must be lowercase letters/numbers/hyphens, with optional 'namespace:' prefix. "
     fi
-    if echo "$NAME_VALUE" | grep -qE '^-|-$'; then
+    if echo "$SKILL_NAME" | grep -qE '^-|-$'; then
       ERRORS="${ERRORS}name must not start or end with a hyphen. "
     fi
-    if echo "$NAME_VALUE" | grep -qE '\-\-'; then
+    if echo "$SKILL_NAME" | grep -qE '\-\-'; then
       ERRORS="${ERRORS}name must not contain consecutive hyphens. "
     fi
   fi
