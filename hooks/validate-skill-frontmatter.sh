@@ -23,9 +23,20 @@ if [ "$TOOL_NAME" = "Write" ]; then
   CONTENT=$(echo "$INPUT" | jq -r '.tool_input.content // empty')
   [ -z "$CONTENT" ] && exit 0
 else
-  # Edit: read current file, we'll check what's there
+  # Edit: validate the post-edit result, not the pre-edit state
+  # Without this, you can't fix invalid frontmatter via Edit (catch-22)
   [ -f "$FILE_PATH" ] || exit 0
-  CONTENT=$(cat "$FILE_PATH")
+  CONTENT=$(echo "$INPUT" | python3 -c "
+import json, sys
+inp = json.loads(sys.stdin.read())
+with open(inp['tool_input']['file_path']) as f:
+    content = f.read()
+old = inp['tool_input'].get('old_string', '')
+new = inp['tool_input'].get('new_string', '')
+if old:
+    content = content.replace(old, new, 1)
+print(content, end='')
+" 2>/dev/null || cat "$FILE_PATH")
 fi
 
 # Extract frontmatter
