@@ -1,9 +1,31 @@
 {
   "name": "rules",
-  "version": "1.0.0",
   "description": "How to work with code — language standards, security, quality, git, CI/CD, Docker, MCP, documentation",
-  "author": { "name": "Cameron Sjo", "url": "https://github.com/cameronsjo" },
+  "author": {
+    "name": "Cameron Sjo",
+    "url": "https://github.com/cameronsjo"
+  },
   "repository": "https://github.com/cameronsjo/rules",
   "license": "BSL-1.1",
-  "keywords": ["rules", "standards", "python", "typescript", "javascript", "golang", "rust", "java", "csharp", "bash", "powershell", "protobuf", "security", "quality", "git", "documentation", "dockerfile", "mcp", "cicd"]
+  "keywords": [
+    "rules",
+    "standards",
+    "python",
+    "typescript",
+    "javascript",
+    "golang",
+    "rust",
+    "java",
+    "csharp",
+    "bash",
+    "powershell",
+    "protobuf",
+    "security",
+    "quality",
+    "git",
+    "documentation",
+    "dockerfile",
+    "mcp",
+    "cicd"
+  ]
 }
