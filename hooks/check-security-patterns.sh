@@ -79,10 +79,13 @@ for entry in "${PATTERNS[@]}"; do
 done
 
 if [[ ${#WARNINGS[@]} -gt 0 ]]; then
-    echo "Security hints for $(basename "$FILE_PATH"):"
+    MSG="Security hints for $(basename "$FILE_PATH"):"
     for w in "${WARNINGS[@]}"; do
-        echo "$w"
+        MSG+=$'\n'"$w"
     done
+    # PostToolUse: plain stdout doesn't reach the model — must use JSON.
+    jq -n --arg msg "$MSG" \
+      '{hookSpecificOutput: {hookEventName: "PostToolUse", additionalContext: $msg}}'
 fi
 
 # Advisory only -- never block
