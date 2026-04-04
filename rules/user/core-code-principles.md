@@ -6,7 +6,7 @@ notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
 - **MUST** write code that reads like paragraphs with clear method/variable names
 - **MUST** add type annotations to all code
 - **MUST** explain WHY in comments: key decisions, optimizations, intellisense info
-- **MUST** use defensive programming: type check datetimes, validate inputs, fail fast
+- **MUST** use defensive programming: type check datetimes, validate inputs, fail fast. **Why:** Debugging is expensive — prevent bugs at write time, not investigation time
 - **MUST** isolate errors: per-row handling, explicit errors (no silent failures)
 - **MUST** follow SOLID + DRY + documentation-driven principles
 - **MUST** use async/await over callbacks for asynchronous operations
@@ -32,6 +32,7 @@ notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
 Separate decisions from side effects. Write the decision as a pure function first, then wrap it with I/O.
 
 - **MUST** extract decision logic (if/else, switch, validation, transformation) into pure functions when the containing function also performs I/O
+- **MUST** define interfaces at I/O boundaries (databases, APIs, filesystems, clocks) and inject implementations — code that makes decisions should never know how data arrives
 - **MUST** write and test the pure function before writing the I/O wrapper
 - **SHOULD** keep I/O wrappers thin — fetch data, call pure function, act on result
 - **SHOULD NOT** embed branching logic inside functions that read files, call APIs, or write output
