@@ -1,4 +1,7 @@
 ---
+notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
+paths: ["**/auth/**", "**/security/**", "**/*guard*", "**/*middleware*", "**/*.auth.*", "**/*.security.*"]
+alwaysApply: false
 ---
 
 # Security Standards
