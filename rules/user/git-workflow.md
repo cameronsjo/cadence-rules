@@ -7,12 +7,38 @@ notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
 
 - **MUST** use Conventional Commits format: `type(scope): description`
 - **MUST** use present tense, imperative mood: "add feature" not "added feature"
+- **MUST** keep subject line under 72 characters
 - **MUST** include `Co-Authored-By: Claude <noreply@anthropic.com>`
 - **MUST** use branch name 'main' not 'master'
 - **MUST** review changes before commit
 - **MUST** use merge over rebase - preserves true history, commit hashes, and timestamps
 - **MUST NOT** force push to main/master
 - **MUST NOT** rebase commits that have been pushed
+
+### Commit Types
+
+| Type | Description | Example |
+|------|-------------|---------|
+| `feat` | New feature | `feat(auth): add OAuth login` |
+| `fix` | Bug fix | `fix(api): handle null response` |
+| `docs` | Documentation only | `docs: update API guide` |
+| `refactor` | Code change without feature/fix | `refactor(db): extract query builder` |
+| `test` | Test changes | `test(auth): add login edge cases` |
+| `chore` | Build/tooling changes | `chore: update dependencies` |
+| `perf` | Performance improvement | `perf(db): add query caching` |
+| `ci` | CI/CD changes | `ci: add deployment pipeline` |
+| `wip` | Work in progress (checkpoint) | `wip: broken — auth middleware incomplete` |
+
+### Breaking Changes
+
+- **MUST** use `!` or `BREAKING CHANGE` footer for breaking changes
+- Examples: `feat!: remove legacy API`, `feat: add v2 API\n\nBREAKING CHANGE: v1 removed`
+
+## Version Control Practices
+
+- **MUST NOT** create backup files (file.bak, file.old) — use version control instead
+- **MUST NOT** commit large binary files without LFS
+- **MUST** use UTC for all timestamps (ISO 8601: `YYYY-MM-DDTHH:mm:ss.sssZ`)
 
 ## Pull Requests
 
