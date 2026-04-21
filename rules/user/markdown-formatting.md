@@ -1,5 +1,9 @@
 ---
 notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
+paths:
+  - "**/*.md"
+  - "**/*.mdx"
+alwaysApply: false
 ---
 # Documentation Standards
 

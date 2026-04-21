@@ -1,5 +1,26 @@
 ---
 notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
+paths:
+  - "**/*.py"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.go"
+  - "**/*.rs"
+  - "**/*.java"
+  - "**/*.cs"
+  - "**/*.sh"
+  - "**/*.swift"
+  - "**/Dockerfile*"
+  - "**/Containerfile"
+  - "**/Makefile"
+  - "**/docker-compose*.yml"
+  - "**/pyproject.toml"
+  - "**/package.json"
+  - "**/go.mod"
+  - "**/Cargo.toml"
+alwaysApply: false
 ---
 # Engineering Standards
 
