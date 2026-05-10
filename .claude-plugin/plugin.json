@@ -1,11 +1,11 @@
 {
-  "name": "rules",
+  "name": "cadence-rules",
   "description": "How to work with code — language standards, security, quality, git, CI/CD, Docker, MCP, documentation",
   "author": {
     "name": "Cameron Sjo",
     "url": "https://github.com/cameronsjo"
   },
-  "repository": "https://github.com/cameronsjo/rules",
+  "repository": "https://github.com/cameronsjo/cadence-rules",
   "license": "BSL-1.1",
   "keywords": [
     "rules",
