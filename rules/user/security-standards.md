@@ -9,13 +9,14 @@ alwaysApply: false
 ## Core Principles
 
 - **MUST** be secure-by-default and secure-by-design
-- **MUST NOT** commit secrets - use environment variables
+- **MUST NOT** commit secrets; **MUST** store secrets in a dedicated secrets manager (HashiCorp Vault, AWS/GCP Secrets Manager) — environment variables are for non-secret config or a short-lived bootstrap token only
 - **MUST** ensure security opt-outs are environment-gated (never in production)
 - **MAY** use security opt-outs for local development (HTTP on localhost, disabled auth, relaxed CORS)
 
 ## Focus Areas (2025+)
 
-- **OWASP Top 10 2025**: Current vulnerability categories
+- **OWASP Top 10 2025**: Current vulnerability categories (SSRF now folded into A01)
+- **OWASP ASVS 5.0**: Application Security Verification Standard (released May 2025)
 - **AI/LLM Security**: Prompt injection, PII leakage, model abuse
 - **Supply Chain**: Dependency vulnerabilities, SBOM, attestation
 - **Zero Trust**: Authentication everywhere, least privilege
@@ -23,74 +24,82 @@ alwaysApply: false
 
 ## OWASP Top 10 Checklist
 
+> Aligned to **OWASP Top 10:2025**. SSRF (CWE-918) and CSRF now fall under A01;
+> Vulnerable Components became A03 Software Supply Chain Failures; A10 is a new category.
+
 ### A01: Broken Access Control
 
 - [ ] Authorization checked on every request
 - [ ] IDOR vulnerabilities tested
 - [ ] Privilege escalation paths reviewed
 - [ ] CORS properly configured
+- [ ] CSRF protection on state-changing requests
+- [ ] SSRF: outbound URLs allowlisted, internal endpoints unreachable (CWE-918)
 
-### A02: Cryptographic Failures
-
-- [ ] Sensitive data encrypted at rest
-- [ ] TLS 1.3 for data in transit
-- [ ] No weak algorithms (MD5, SHA1, DES)
-- [ ] Secrets in vault, not env vars for production
-
-### A03: Injection
-
-- [ ] SQL: Parameterized queries only
-- [ ] Command: No shell execution with user input
-- [ ] XSS: Output encoding, CSP headers
-- [ ] Prompt: LLM input sanitization
-
-### A04: Insecure Design
-
-- [ ] Threat modeling completed
-- [ ] Security patterns documented
-- [ ] Fail-safe defaults implemented
-- [ ] Defense in depth applied
-
-### A05: Security Misconfiguration
+### A02: Security Misconfiguration
 
 - [ ] Default credentials changed
 - [ ] Error messages sanitized
 - [ ] Unnecessary features disabled
 - [ ] Security headers configured
 
-### A06: Vulnerable Components
+### A03: Software Supply Chain Failures
 
 - [ ] Dependencies scanned (npm audit, uv audit)
 - [ ] SBOM generated
 - [ ] Critical CVEs addressed
 - [ ] Update process defined
+- [ ] Build/CI pipeline integrity (pinned actions, provenance/attestation)
+- [ ] Dependencies pinned and checksums verified
 
-### A07: Auth Failures
+### A04: Cryptographic Failures
+
+- [ ] Sensitive data encrypted at rest
+- [ ] TLS 1.3 for data in transit
+- [ ] No weak algorithms (MD5, SHA1, DES)
+- [ ] Secrets in a managed vault, not env vars (production)
+
+### A05: Injection
+
+- [ ] SQL: Parameterized queries only
+- [ ] Command: No shell execution with user input
+- [ ] XSS: Output encoding, CSP headers
+- [ ] Prompt: LLM input sanitization
+
+### A06: Insecure Design
+
+- [ ] Threat modeling completed
+- [ ] Security patterns documented
+- [ ] Fail-safe defaults implemented
+- [ ] Defense in depth applied
+
+### A07: Authentication Failures
 
 - [ ] MFA available for sensitive operations
 - [ ] Password requirements enforced
 - [ ] Session management secure
 - [ ] Rate limiting on auth endpoints
 
-### A08: Data Integrity Failures
+### A08: Software or Data Integrity Failures
 
 - [ ] Code signing implemented
 - [ ] CI/CD pipeline secured
 - [ ] Dependencies verified (checksums)
 - [ ] Deserialization safe
 
-### A09: Logging Failures
+### A09: Security Logging and Alerting Failures
 
 - [ ] Security events logged
 - [ ] No PII in logs
 - [ ] Tamper-proof log storage
 - [ ] Alerting configured
 
-### A10: SSRF
+### A10: Mishandling of Exceptional Conditions
 
-- [ ] URL allowlisting for outbound requests
-- [ ] Internal endpoints not exposed
-- [ ] Response validation implemented
+- [ ] Errors handled explicitly — no silent failures
+- [ ] Fail closed (deny) on unexpected exceptions
+- [ ] No sensitive detail leaked in errors or stack traces
+- [ ] Consistent state preserved on partial failures
 
 ## Severity Classification
 
