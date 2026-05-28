@@ -24,21 +24,22 @@ alwaysApply: false
 ## In-Session Security Review
 
 The standards above are **design-time** principles, applied while writing code. Catching
-issues *as Claude edits* is a separate, runtime layer.
+issues *as Claude edits* is a separate, runtime layer, provided by one of two options:
 
-- **SHOULD** install the official **`security-guidance`** plugin for runtime review. It adds
-  three layers: a per-edit pattern match, an end-of-turn model review of the diff, and an
-  agentic review at commit/push.
-  - Install: `/plugin install security-guidance@claude-plugins-official`
-  - Configure via `.claude/security-patterns.yaml` (patterns) and
-    `.claude/claude-security-guidance.md` (model guidance)
-- **`cadence-hooks`** ships a zero-config, no-API per-edit pattern baseline
-  (`rules:security-patterns`). It **overlaps layer 1** of `security-guidance` — running both
-  produces duplicate per-edit nudges, so **MUST** pick one as the per-edit layer: the
-  cadence-hooks baseline when you want zero setup, the official plugin when you want
-  configurable patterns plus model-backed review.
+- **`security-guidance`** (official plugin) — three runtime layers: a per-edit pattern
+  match, an end-of-turn model review of the diff, and an agentic review at commit/push.
+  Configurable and model-backed; requires setup and an API key.
+- **`cadence-hooks`** (`rules:security-patterns`) — a zero-config, no-API per-edit pattern
+  baseline. One layer, no setup.
+
+- **MUST** run exactly one per-edit layer: both options pattern-match on edit, so enabling
+  both produces duplicate nudges. Use `cadence-hooks` for zero setup, or `security-guidance`
+  when you want configurable patterns plus model-backed review.
 - **SHOULD** treat any single layer as defense-in-depth, not a complete control — design-time
   principles, per-edit patterns, and model review each catch what the others miss.
+
+Setup commands and config-file locations for `security-guidance` live in its own plugin
+docs; this file states the required outcome (exactly one per-edit layer), not the install steps.
 
 ## OWASP Top 10 Checklist
 
