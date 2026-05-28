@@ -21,6 +21,28 @@ alwaysApply: false
 - **Zero Trust**: Authentication everywhere, least privilege
 - **API Security**: BOLA, rate limiting, input validation
 
+## In-Session Security Review
+
+The standards above are **design-time** principles, applied while writing code. Catching
+issues *as Claude edits* is a separate, runtime layer, provided by one of two options:
+
+- **`security-guidance`** (official plugin) — three runtime layers: a per-edit pattern
+  match, an end-of-turn model review of the diff, and an agentic review at commit/push.
+  Configurable and model-backed; requires setup and API access.
+- **`cadence-hooks`** (`rules:security-patterns`) — a zero-config, no-API per-edit pattern
+  baseline. One layer, no setup.
+
+**Which to run:**
+
+- **MUST** run exactly one per-edit layer: both options pattern-match on edit, so enabling
+  both produces duplicate nudges. Use `cadence-hooks` for zero setup, or `security-guidance`
+  when you want configurable patterns plus model-backed review.
+- **SHOULD** treat any single layer as defense-in-depth, not a complete control — design-time
+  principles, per-edit patterns, and model review each catch what the others miss.
+
+Setup commands and config-file locations for `security-guidance` live in its own plugin
+docs; this file states the required outcome (exactly one per-edit layer), not the install steps.
+
 ## OWASP Top 10 Checklist
 
 ### A01: Broken Access Control
