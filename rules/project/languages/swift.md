@@ -56,7 +56,8 @@ let maxRetry = 3
 - **MUST** use structured concurrency (task groups, async let) over unstructured `Task.detached`
 - **MUST** mark `@MainActor` only on classes that genuinely need main-thread access (UI state, AppKit)
 - **MUST** use `nonisolated` for methods that do I/O or background work on `@MainActor` classes
-- **MUST** use `@concurrent` to explicitly move async work off the caller's actor (replaces `Task.detached`)
+- **MUST** use `@concurrent` to explicitly offload async work off the caller's executor (SE-0461; replaces `Task.detached`)
+- **SHOULD** use `nonisolated(nonsending)` to keep async work on the caller's executor when offloading is not desired (SE-0461; opposite semantics from `@concurrent`)
 - **MUST** map non-Sendable types (EKEvent, EKReminder) to Sendable value types inside callbacks before crossing actor boundaries
 - **MUST NOT** use `@preconcurrency` or `@unchecked Sendable` without a documented safety invariant and follow-up ticket
 - **MUST NOT** use `DispatchQueue.main.async` in `@MainActor` contexts — you're already on main

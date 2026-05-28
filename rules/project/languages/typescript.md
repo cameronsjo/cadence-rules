@@ -8,9 +8,9 @@ paths:
 
 # TypeScript Standards
 
-- **Runtime**: Node 22 LTS / Bun 1.x
-- **TypeScript**: 5.6+ with strict mode
-- **Linting/Formatting**: Biome (replaces ESLint + Prettier)
+- **Runtime**: Node 24 LTS / Bun 1.x
+- **TypeScript**: 6.0+ (`strict: true` is the default; never disable it)
+- **Linting/Formatting**: Biome v2+ (type-aware lint rules require Biome v2+; replaces ESLint + Prettier)
 - **Testing**: Vitest (fast, native ESM, TypeScript)
 - **Build**: tsup, unbuild, or esbuild
 - **Validation**: Zod for runtime validation
@@ -19,11 +19,12 @@ paths:
 
 ## Core Requirements
 
-- **MUST** use strict TypeScript (`strict: true` in tsconfig)
+- **MUST** use strict TypeScript (`strict: true` in tsconfig; this is the default in TypeScript 6.0+ — **MUST NOT** disable it)
 - **MUST** add type annotations to all code
 - **MUST** avoid `any` - use `unknown` with type guards
 - **MUST** use `as const`, enums, or literal types instead of magic strings
 - **MUST** enable `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `verbatimModuleSyntax` in tsconfig
+- **MUST** use ES2025 import attributes syntax for typed imports: `import data from "./data.json" with { type: "json" }` (replaces deprecated `assert`)
 - **MUST** use Biome for linting and formatting
 - **SHOULD** use ULIDs over UUIDs for IDs (unless external-facing)
 - **SHOULD** use branded types for domain modeling (e.g., `type UserId = string & { readonly __brand: "UserId" }`)
