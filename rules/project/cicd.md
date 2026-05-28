@@ -124,7 +124,7 @@ jobs:
 # Go
 - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5
   with:
-    go-version: '1.24'
+    go-version: '1.26'
     cache: true
 
 # Docker layers
