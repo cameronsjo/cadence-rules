@@ -21,6 +21,25 @@ alwaysApply: false
 - **Zero Trust**: Authentication everywhere, least privilege
 - **API Security**: BOLA, rate limiting, input validation
 
+## In-Session Security Review
+
+The standards above are **design-time** principles, applied while writing code. Catching
+issues *as Claude edits* is a separate, runtime layer.
+
+- **SHOULD** install the official **`security-guidance`** plugin for runtime review. It adds
+  three layers: a per-edit pattern match, an end-of-turn model review of the diff, and an
+  agentic review at commit/push.
+  - Install: `/plugin install security-guidance@claude-plugins-official`
+  - Configure via `.claude/security-patterns.yaml` (patterns) and
+    `.claude/claude-security-guidance.md` (model guidance)
+- **`cadence-hooks`** ships a zero-config, no-API per-edit pattern baseline
+  (`rules:security-patterns`). It **overlaps layer 1** of `security-guidance` — running both
+  produces duplicate per-edit nudges, so **MUST** pick one as the per-edit layer: the
+  cadence-hooks baseline when you want zero setup, the official plugin when you want
+  configurable patterns plus model-backed review.
+- **SHOULD** treat any single layer as defense-in-depth, not a complete control — design-time
+  principles, per-edit patterns, and model review each catch what the others miss.
+
 ## OWASP Top 10 Checklist
 
 ### A01: Broken Access Control
