@@ -11,7 +11,7 @@ paths:
 
 # Python Standards
 
-- **Runtime**: Python 3.13+ (3.14 released Oct 2025)
+- **Runtime**: Python 3.14+ (released Oct 2025; deferred annotation evaluation via PEP 649 is available but opt-in, not the default)
 - **Version Management**: mise (replaces pyenv)
 - **Package Management**: uv
 - **Linting/Formatting**: Ruff (replaces black, isort, flake8)

@@ -24,6 +24,10 @@ paths:
 - **MUST NOT** write new class components
 - **SHOULD** convert JSX to TSX when modifying legacy files
 
+## Runtime Target
+
+- **MUST** target Node.js 24 LTS (Krypton, Active LTS since 2025-10-28); Node 22 is in maintenance
+
 ## Modern JavaScript (ES2024+)
 
 - **MUST** use `const`/`let` - never `var`
