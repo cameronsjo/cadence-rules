@@ -6,7 +6,7 @@ paths:
 
 # Protocol Buffers / gRPC Standards
 
-- **Syntax**: proto3 (or Editions for new projects)
+- **Syntax**: proto3 for existing projects; Edition 2024 for new projects (tooling still maturing)
 - **Linting**: buf lint
 - **Breaking Change Detection**: buf breaking
 - **Code Generation**: buf generate
@@ -22,6 +22,8 @@ paths:
 - **MUST** use field numbers 1-15 for frequently-set fields (1 byte)
 - **MUST NOT** use field numbers 19000-19999 (reserved by protobuf)
 - **SHOULD** leave gaps in field numbers for future high-frequency fields
+- **SHOULD** use proto3 for existing projects — changing syntax in an established schema is disruptive
+- **SHOULD** evaluate Edition 2024 for new projects; it supersedes Edition 2023 as the current protobuf edition, but migration tooling is still maturing — verify buf and language runtime support before adopting
 - **SHOULD** use buf for linting and breaking change detection
 
 ## Field Numbering Strategy

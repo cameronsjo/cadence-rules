@@ -8,7 +8,7 @@ paths:
 
 # Go Standards
 
-- **Version**: Go 1.24+ (iterators stable, Swiss Tables maps, weak pointers)
+- **Version**: Go 1.26+ (1.24 is EOL)
 - **HTTP**: stdlib net/http (1.22+ routing) or chi
 - **Database**: sqlc (type-safe SQL) or pgx
 - **Validation**: go-playground/validator

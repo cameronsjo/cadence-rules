@@ -38,6 +38,15 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
         .toList();
 }
 
+// Structured concurrency (JEP 533, 7th preview in JDK 27) — companion to virtual threads;
+// MAY adopt where appropriate, prefer once it finalizes
+try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+    var userFuture  = scope.fork(() -> userRepo.findById(id));
+    var orderFuture = scope.fork(() -> orderRepo.findByUser(id));
+    scope.join().throwIfFailed();
+    return new UserProfile(userFuture.get(), orderFuture.get());
+}
+
 // Structured logging
 logger.info("Fetching user: userId={}", userId);
 ```
@@ -68,3 +77,4 @@ ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 - **SHOULD** use `@Valid` and Bean Validation for all API inputs
 - **SHOULD** configure JNDI lookup restrictions in Log4j2 (`log4j2.formatMsgNoLookups=true`)
 - **SHOULD** use module system for sandboxing in Java 21+
+- **MAY** adopt structured concurrency (JEP 533, seventh preview targeting JDK 27) alongside virtual threads where it simplifies fan-out/fan-in; prefer it once it finalizes — do not use in production code that cannot accept preview-API churn
