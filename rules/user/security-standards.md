@@ -28,9 +28,11 @@ issues *as Claude edits* is a separate, runtime layer, provided by one of two op
 
 - **`security-guidance`** (official plugin) — three runtime layers: a per-edit pattern
   match, an end-of-turn model review of the diff, and an agentic review at commit/push.
-  Configurable and model-backed; requires setup and an API key.
+  Configurable and model-backed; requires setup and API access.
 - **`cadence-hooks`** (`rules:security-patterns`) — a zero-config, no-API per-edit pattern
   baseline. One layer, no setup.
+
+**Which to run:**
 
 - **MUST** run exactly one per-edit layer: both options pattern-match on edit, so enabling
   both produces duplicate nudges. Use `cadence-hooks` for zero setup, or `security-guidance`
