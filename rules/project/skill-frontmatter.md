@@ -26,6 +26,8 @@ Two specs govern frontmatter: the [Agent Skills spec](https://agentskills.io) (o
 | `context` | Claude Code | No | `fork` to run in subagent |
 | `agent` | Claude Code | No | Subagent type when `context: fork` |
 | `hooks` | Claude Code | No | Skill-scoped hooks |
+| `when_to_use` | Claude Code | No | Activation guidance that supplements `description` |
+| `effort` | Claude Code | No | Reasoning depth: `low`, `medium`, or `high` |
 
 - **MUST** include `name` and `description` in every SKILL.md
 - **MUST** match `name` to the parent directory name exactly

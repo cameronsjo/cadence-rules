@@ -66,6 +66,10 @@ jobs:
           aws-region: us-east-1
 ```
 
+### OIDC Custom Properties
+
+GitHub Actions OIDC tokens now expose repository custom properties as `repo_property_*` claims (GA March 2026). Use these claims in IAM trust policies for fine-grained role assumption without hard-coding repository names or environment conditions.
+
 ## Reusable Workflows
 
 ```yaml

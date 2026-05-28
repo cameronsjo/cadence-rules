@@ -35,6 +35,10 @@ paths:
 - **MUST** cover: emails, SSNs, phone numbers, credit card numbers
 - **SHOULD** test with PII patterns to verify sanitization
 
+## Spec Version
+
+The current stable MCP specification revision is **2025-11-25** (modelcontextprotocol.io/specification/2025-11-25). An Extensions framework — using reverse-DNS extension IDs with independent versioning — is expected in an upcoming spec RC; design new servers for forward-compatibility by keeping extension-specific behavior isolated.
+
 ## Version Constraints
 
 - **MUST** pin to major version: `fastmcp>=2.13.0,<3.0.0`
