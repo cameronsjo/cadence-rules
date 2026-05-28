@@ -26,7 +26,7 @@ paths:
 
 ## Runtime Target
 
-- **MUST** target Node.js 24 LTS (Krypton, current LTS since 2025-05-06); Node 22 is in maintenance
+- **MUST** target Node.js 24 LTS (Krypton, Active LTS since 2025-10-28); Node 22 is in maintenance
 
 ## Modern JavaScript (ES2024+)
 

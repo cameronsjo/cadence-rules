@@ -1,4 +1,5 @@
 ---
+notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
 paths:
   - "**/*.swift"
   - "**/Package.swift"
