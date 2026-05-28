@@ -38,7 +38,7 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
         .toList();
 }
 
-// Structured concurrency (JEP 533, preview in JDK 25–27) — companion to virtual threads;
+// Structured concurrency (JEP 533, 7th preview in JDK 27) — companion to virtual threads;
 // MAY adopt where appropriate, prefer once it finalizes
 try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
     var userFuture  = scope.fork(() -> userRepo.findById(id));
