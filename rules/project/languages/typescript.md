@@ -31,6 +31,11 @@ paths:
 - **SHOULD** use `satisfies` to validate types without widening
 - **SHOULD** use `using` declarations for automatic resource cleanup
 
+## Web Output & Encoding
+
+- **MUST** escape `<` when serializing data into an inline `<script>` (JSON-LD, hydration/island state). `JSON.stringify` does not escape `<` or `/`, so a value containing `</script>` ends the block early and injects markup: `JSON.stringify(data).replace(/</g, '\\u003c')`.
+- **MUST** `encodeURIComponent` any dynamic value interpolated into a URL path segment (slug/tag links, redirect targets). Raw interpolation breaks navigation and invites injection when the value contains reserved characters (`/`, `%`, `#`, `?`, spaces).
+
 ## React 19+ Standards (TSX)
 
 ### Core Philosophy

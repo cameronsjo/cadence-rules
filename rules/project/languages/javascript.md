@@ -36,6 +36,11 @@ paths:
 - **SHOULD** use destructuring for object/array access
 - **SHOULD** use spread syntax over `Object.assign`
 
+## Web Output & Encoding
+
+- **MUST** escape `<` when serializing data into an inline `<script>` (JSON-LD, hydration/island state). `JSON.stringify` does not escape `<` or `/`, so a value containing `</script>` ends the block early and injects markup: `JSON.stringify(data).replace(/</g, '\\u003c')`.
+- **MUST** `encodeURIComponent` any dynamic value interpolated into a URL path segment (slug/tag links, redirect targets). Raw interpolation breaks navigation and invites injection when the value contains reserved characters (`/`, `%`, `#`, `?`, spaces).
+
 ## Filesystem
 
 - **MUST** treat `ENOENT` as a first-run signal when reading user-config or per-user state files (`~/.config/...`, `~/.<app>/...`), not an error. Catch `readErr.code === 'ENOENT'`, start from a default object, and proceed to write. A user who hasn't created the file yet should get a successful first-run, not a stack trace.
