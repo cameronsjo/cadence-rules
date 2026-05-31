@@ -68,3 +68,26 @@ Prefer stdlib over frameworks. Use generics for data structures, not business lo
 - **SHOULD** use `errgroup` with context for goroutine lifecycle (prevents goroutine leaks)
 - **SHOULD** use `sync.Mutex` or channels for shared state -- never bare goroutine writes
 - **SHOULD** use `-race` flag in CI test runs to detect data races
+
+## Build & Verification
+
+- **MUST** run `go vet ./...` separately from `go build ./...` — the compiler passes with wrong-arity test calls and other subtle issues that vet catches. Run both after any function signature change.
+- **SHOULD** run `go test ./...` before claiming a change is complete.
+
+## Module Lifecycle
+
+- **`+incompatible` is a "module ran out of road" flag, not just a version suffix.** It means the module never adopted semantic-import versioning, so any future major MUST live in a new module path. When a Dependabot CVE names a `+incompatible` module with `first_patched_version` higher than `go list -m -versions <module>` returns, the successor lives elsewhere — probe the Go proxy directly: `curl -s https://proxy.golang.org/<candidate-path>/@v/list` for tag lists, `curl -s https://proxy.golang.org/<candidate-path>/@latest` for the latest. Common successor patterns: `<path>/v2`, `<path>/api` and `<path>/client` split modules, or a fully renamed canonical path (e.g. `github.com/docker/docker` → `github.com/moby/moby/{api,client}` + `github.com/moby/moby/v2`). Dependabot's `first_patched_version` is a hint — it can name a version in a different module path than the one it's flagging, or refer to a daemon/binary release rather than the Go SDK linkage. Use it to find the successor, not as a pin target.
+- **Daemon-side CVEs in a vendored-daemon Go module are not exploitable from client-only usage.** Modules that ship both daemon and client code (`docker/docker`, `etcd`, `containerd`, anything sliced out of CNCF) get flagged for daemon-side bugs that aren't reachable from the SDK linkage. Read the advisory's "Affected" section before bumping — the actual security boundary may be the running binary on the deploy target, not the linked Go module.
+
+## Standard Library Gaps
+
+- **`os.UserStateDir` does not exist in Go stdlib.** For log/state file paths, use `os.UserConfigDir()` — maps to `~/Library/Application Support/` on macOS, `~/.config/` on Linux. Co-locating logs with config is acceptable for personal tools.
+- **`io.NopCloser` wraps `io.Reader`, not a generic `io.Closer`.** For a no-op `io.Closer`, define a private `nopCloser struct{}` with `func (nopCloser) Close() error { return nil }`.
+
+## slog Bootstrap
+
+- **The package that calls `slog.SetDefault()` cannot log through the handler it configures** — the default (stderr-only) handler is active during setup. Keep bootstrap paths minimal and log from callers after the logger is wired.
+
+## Releases (goreleaser)
+
+- **MUST** use annotated tags for goreleaser releases: `git tag -a vX.Y.Z -m "vX.Y.Z: <summary>"`. Lightweight tags (`git tag vX.Y.Z`) fail silently with `fatal: no tag message?` and do not trigger the release workflow.
