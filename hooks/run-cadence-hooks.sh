@@ -19,7 +19,10 @@ trap 'rm -f "$err_file"' EXIT
 rc=0
 "$BINARY" "$@" 2>"$err_file" || rc=$?
 
-if [ "$rc" -ne 0 ] && grep -qi "unrecognized subcommand" "$err_file"; then
+# Stale-binary signatures: clap v4 says "unrecognized subcommand", clap v3 said
+# "The subcommand '...' wasn't recognized". Match both so the fail-open holds
+# regardless of which clap generation built the installed binary.
+if [ "$rc" -ne 0 ] && grep -qiE "unrecognized subcommand|wasn't recognized" "$err_file"; then
   # Binary is installed but stale: this subcommand doesn't exist in it yet.
   # Fail open instead of blocking every matching tool call until upgrade.
   exit 0
