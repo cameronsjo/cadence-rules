@@ -27,6 +27,7 @@ paths:
 - **MUST** include type hints on all functions and variables
 - **MUST** use Ruff for linting and formatting
 - **MUST** use lazy logging: `logger.debug("val=%s", val)` not f-strings
+- **MUST** use `%s` (never `%d`/`%f`) for nullable log values — `.get()`-derived values and `T | None` params; `%d` on `None` raises a logging format error at runtime
 - **MUST** use Pydantic for validation (config, API bodies, schemas)
 - **MUST** use `TaskGroups` (3.11+) for structured concurrency - no dangling futures
 - **MUST** explicitly return `T | None` rather than implicit `None`
