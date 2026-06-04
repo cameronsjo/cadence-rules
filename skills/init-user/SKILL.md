@@ -1,5 +1,5 @@
 ---
-name: init-user
+name: cadence-rules:init-user
 description: >
   Install universal rules to ~/.claude/rules/workbench/. Self-destructs after
   running.

@@ -1,5 +1,5 @@
 ---
-name: init-project
+name: cadence-rules:init-project
 description: >
   Install rules to .claude/rules/workbench/ with path-scoping. Detect project
   languages or choose manually.
