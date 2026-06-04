@@ -1,5 +1,5 @@
 ---
-name: init-all
+name: cadence-rules:init-all
 description: >
   Install all 22 rules to ~/.claude/rules/workbench/. Self-destructs after
   running.
