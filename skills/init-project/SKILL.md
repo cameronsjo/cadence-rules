@@ -1,8 +1,6 @@
 ---
 name: cadence-rules:init-project
-description: >
-  Install rules to .claude/rules/workbench/ with path-scoping. Detect project
-  languages or choose manually.
+description: Use when installing rules into a project's .claude/rules/workbench/ with path-scoping — detects project languages or lets you choose manually.
 allowed-tools: Read, Write, Bash, AskUserQuestion
 license: MIT
 metadata:

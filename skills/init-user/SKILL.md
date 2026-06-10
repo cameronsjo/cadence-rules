@@ -1,8 +1,6 @@
 ---
 name: cadence-rules:init-user
-description: >
-  Install universal rules to ~/.claude/rules/workbench/. Self-destructs after
-  running.
+description: Use when installing the 6 universal user-level rules to ~/.claude/rules/workbench/. Self-destructs after running.
 allowed-tools: Read, Write, Bash
 license: MIT
 metadata:
