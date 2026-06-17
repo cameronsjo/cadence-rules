@@ -43,7 +43,7 @@ notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
 ## Pull Requests
 
 - **MUST** use closing keywords: "Closes #123" or "Fixes #123" or "Resolves #123"
-- **MUST** format multiple issues as: "Closes #52, #53, #54"
+- **MUST** repeat the keyword for each issue: "Closes #52, closes #53" — a bare comma list ("Closes #52, #53") auto-closes only the **FIRST**; the rest stay open and need manual closing (verified 2026-06-16: "Closes #6, #30" closed #6, left #30 open)
 - **MUST NOT** use "Addresses" - it doesn't auto-close issues
 - **SHOULD** link issues early in PR description for visibility
 

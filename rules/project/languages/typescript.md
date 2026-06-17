@@ -35,6 +35,7 @@ paths:
 
 - **MUST** escape `<` when serializing data into an inline `<script>` (JSON-LD, hydration/island state). `JSON.stringify` does not escape `<` or `/`, so a value containing `</script>` ends the block early and injects markup: `JSON.stringify(data).replace(/</g, '\\u003c')`.
 - **MUST** `encodeURIComponent` any dynamic value interpolated into a URL path segment (slug/tag links, redirect targets). Raw interpolation breaks navigation and invites injection when the value contains reserved characters (`/`, `%`, `#`, `?`, spaces).
+- **MUST NOT** pass a leading-slash path to `new URL(path, base)` when `base` carries a path — a root-relative path **silently drops the base path**: `new URL('/search', 'https://h/v3')` → `https://h/search` (the `/v3` vanishes), mis-routing every request to a 404 that reads as "endpoint missing." Use a slash-terminated base + slash-less path (`new URL('search', 'https://h/v3/')`) or join explicitly. Bites any HTTP-client wrapper with a versioned base URL.
 
 ## React 19+ Standards (TSX)
 
