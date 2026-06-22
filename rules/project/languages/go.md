@@ -83,6 +83,11 @@ Prefer stdlib over frameworks. Use generics for data structures, not business lo
 
 - **`os.UserStateDir` does not exist in Go stdlib.** For log/state file paths, use `os.UserConfigDir()` — maps to `~/Library/Application Support/` on macOS, `~/.config/` on Linux. Co-locating logs with config is acceptable for personal tools.
 - **`io.NopCloser` wraps `io.Reader`, not a generic `io.Closer`.** For a no-op `io.Closer`, define a private `nopCloser struct{}` with `func (nopCloser) Close() error { return nil }`.
+- **`hash.Hash.Sum(b)` *appends* the digest to `b` — it does not hash `b`.** `sha256.New().Sum([]byte(x))` returns `x || sha256("")`, so slicing the result (`[:16]`) yields the first bytes of **raw `x`**, not a hash. Built as a redacted `content_hash` for logs, it silently *leaks the content it was meant to hide*. Use `sum := sha256.Sum256([]byte(x)); sum[:n]`.
+
+## Testing
+
+- **macOS caps Unix-socket paths at ~104 chars (`sun_path`); `t.TempDir()` overflows it.** `t.TempDir()` embeds the full (long) test-function name in the path, so binding a socket under it fails with `bind: invalid argument`. Bind test sockets under a short `os.MkdirTemp("", "x")` dir instead (with `t.Cleanup(func() { os.RemoveAll(dir) })`). Files under `t.TempDir()` are fine — only the socket-path length limit bites. (`net.Listen("unix", …)` in a Go test; the Python side dodges it because `tempfile.mkdtemp()` uses a short name.)
 
 ## slog Bootstrap
 
