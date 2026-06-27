@@ -12,6 +12,7 @@ notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
 - **MUST** use branch name 'main' not 'master'
 - **MUST** review changes before commit
 - **MUST** use merge over rebase - preserves true history, commit hashes, and timestamps
+- **SHOULD** commit aggressively — uncommitted work is invisible to recovery
 - **MUST NOT** force push to main/master
 - **MUST NOT** rebase commits that have been pushed
 
