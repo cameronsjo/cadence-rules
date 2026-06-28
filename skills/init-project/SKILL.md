@@ -12,7 +12,7 @@ Install rules from this plugin to `.claude/rules/workbench/` in the current proj
 
 Two tiers:
 - **Universal rules** (6): code principles, engineering standards, git workflow, markdown, security, testing/observability — always-loaded, no path scoping
-- **Language & tool rules** (16): bash, csharp, go, java, javascript, powershell, protobuf, python, rust, typescript, beads, cicd, dockerfile, docs, mcp, mermaid — path-scoped
+- **Language & tool rules** (15): bash, csharp, go, java, javascript, powershell, protobuf, python, rust, typescript, cicd, dockerfile, docs, mcp, mermaid — path-scoped
 
 ## Steps
 
@@ -61,7 +61,6 @@ find . -maxdepth 2 \( -path "./.github/workflows/*" -o -name ".gitlab-ci.yml" -o
 find . -maxdepth 4 \( -path "*/docs/*.md" -o -name "*.mdx" \) -print -quit 2>/dev/null | grep -q . && echo "DETECTED docs"
 find . -maxdepth 4 \( -name "*.mermaid" -o -name "*.mmd" \) -print -quit 2>/dev/null | grep -q . && echo "DETECTED mermaid"
 find . -maxdepth 4 \( -path "*/mcp/*" -o -name "mcp-*" -o -name "*_mcp.py" -o -name "*-mcp.ts" \) -print -quit 2>/dev/null | grep -q . && echo "DETECTED mcp"
-[ -d ".beads" ] && echo "DETECTED beads"
 ```
 
 3. **Show detections** — Format as a checklist:
@@ -78,10 +77,10 @@ Detected rules for this project:
 4. **Ask scope** — Use the AskUserQuestion tool with these exact options:
    - label: "Universal", description: "Install the 6 core rules only (code, security, git, docs, testing, engineering)"
    - label: "Universal + Detected (Recommended)", description: "Install 6 core rules + all detected language/tool rules"
-   - label: "All", description: "Install all 22 rules (6 universal + 16 language/tool)"
+   - label: "All", description: "Install all 21 rules (6 universal + 15 language/tool)"
    - label: "Specify", description: "Choose exactly which rules to install"
 
-If user selects "Specify", present a second AskUserQuestion with `multiSelect: true` listing all 22 available rules by name.
+If user selects "Specify", present a second AskUserQuestion with `multiSelect: true` listing all 21 available rules by name.
 
 5. **Hash compare** — For the selected rules, run a hash comparison. Do NOT read any rule file contents yet.
 
