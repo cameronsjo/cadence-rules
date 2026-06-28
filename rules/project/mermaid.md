@@ -1,5 +1,5 @@
 ---
-notice: "Maintained by the rules plugin. Source: github.com/cameronsjo/rules"
+notice: "Maintained by the cadence-rules plugin. Source: github.com/cameronsjo/cadence-rules"
 paths:
   - "**/*.mermaid"
   - "**/*.mmd"
