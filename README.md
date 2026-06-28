@@ -23,7 +23,6 @@ All files are installed to `~/.claude/rules/` with a `rules-` prefix, creating a
 
 | Source file | Installed as | Triggers on |
 |-------------|-------------|-------------|
-| `beads.md` | `rules-beads.md` | `.beads/**` |
 | `cicd.md` | `rules-cicd.md` | CI/CD configs |
 | `dockerfile.md` | `rules-dockerfile.md` | Dockerfiles |
 | `docs.md` | `rules-docs.md` | Markdown files |
