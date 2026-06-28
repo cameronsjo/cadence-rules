@@ -1,6 +1,6 @@
 ---
 name: cadence-rules:init-all
-description: Use when installing all 21 rules (universal + language/tool) to ~/.claude/rules/workbench/ at once. Self-destructs after running.
+description: Use when installing the complete set of universal and language/tool rules to the user-level workbench directory in one pass.
 allowed-tools: Read, Write, Bash
 license: MIT
 metadata:
